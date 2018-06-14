@@ -19,6 +19,8 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import com.anthonini.brewer.controller.CervejaController;
 
+import nz.net.ultraq.thymeleaf.LayoutDialect;
+
 /**
  * Spring Handler Mapping Class Configuration
  * Spring View Resolver
@@ -45,6 +47,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		SpringTemplateEngine engine = new SpringTemplateEngine();
 		engine.setEnableSpringELCompiler(true);
 		engine.setTemplateResolver(templateResolver());
+		engine.addDialect(new LayoutDialect());
 		
 		return engine;
 	}
@@ -52,7 +55,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	private ITemplateResolver templateResolver() {
 		SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
 		resolver.setApplicationContext(applicationContext);
-		resolver.setPrefix("classpath:/templates");
+		resolver.setPrefix("classpath:/templates/");
 		resolver.setSuffix(".html");
 		resolver.setTemplateMode(TemplateMode.HTML);
 		
