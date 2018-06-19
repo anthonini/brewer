@@ -3,7 +3,7 @@ package com.anthonini.brewer.model;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class Cerveja {
+public class Beer {
 
 	@NotBlank(message = "SKU é obrigatório")
 	private String sku;
