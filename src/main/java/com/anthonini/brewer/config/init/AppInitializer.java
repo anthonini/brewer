@@ -2,6 +2,7 @@ package com.anthonini.brewer.config.init;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import com.anthonini.brewer.config.JPAConfig;
 import com.anthonini.brewer.config.WebConfig;
 
 /**
@@ -12,7 +13,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return null;
+		return new Class<?>[] { JPAConfig.class };
 	}
 
 	@Override
