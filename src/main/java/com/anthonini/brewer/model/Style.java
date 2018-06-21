@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "style")
@@ -22,6 +24,8 @@ public class Style implements Serializable {
 	@Column(name = "id_style")
 	private Long id;
 	
+	@NotBlank
+	@Size(max = 20, message = "O tamanho do nome não pode ser maior que {max} caracteres")
 	private String name;
 	
 	@OneToMany(mappedBy = "style")

@@ -12,9 +12,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.anthonini.brewer.validation.SKU;
 
 @Entity
 @Table(name = "beer")
@@ -27,34 +36,54 @@ public class Beer implements Serializable {
 	@Column(name = "id_beer")
 	private Long id;
 	
+	@SKU
 	@NotBlank(message = "SKU é obrigatório")
 	private String sku;
 	
 	@NotBlank(message = "Nome é obrigatório")
 	private String name;
 	
-	@Size(min = 1, max = 50, message = "O tamanho da descrição deve estar entre 1 e 50")
+	@NotBlank(message = "Descrição é obrigatório")
+	@Size(max = 50, message = "O tamanho da descrição deve estar entre 1 e {max}")
 	private String description;
 	
+	@NotNull(message = "Valor é obrigatório")
+	@DecimalMin(value = "0.50", message = "O valor da cerveja deve ser maior que R$0,50")
+	@DecimalMax(value = "9999999.99", message = "Valor deve ser menor ou igual a R$9.999.999,99")
 	private BigDecimal value;
 	
+	@NotNull(message = "Teor alcóolico é obrigatório")
+	@DecimalMax(value = "100.00", message = "Teor alcóolico deve ser menor ou igual a 100%")
 	@Column(name = "alcoholic_strength")
 	private BigDecimal alcoholicStrength; 
 	
+	@NotNull(message = "A comissão é obrigatória")
+	@DecimalMax(value = "100.00", message = "Comissão deve ser menor ou igual a 100%")
 	private BigDecimal comission;
 	
+	@NotNull(message = "A quantidade em estoque é obrigatória")
+	@Max(value = 9999, message = "A quantidade em estoque  deve ser menor ou igual a 9.999")
+	@Min(value = 1, message = "A quantidade em estoque  deve ser maior ou igual a 1")
 	@Column(name = "stock_quantity")
 	private Integer stockQuantity;
 	
+	@NotNull(message = "Origem é obrigatório")
 	@Enumerated(EnumType.STRING)
 	private Origin origin;
 	
+	@NotNull(message = "Sabor é obrigatório")
 	@Enumerated(EnumType.STRING)
 	private Flavor flavor;
 	
+	@NotNull(message = "Estilo é obrigatório")
 	@ManyToOne
 	@JoinColumn(name = "id_style")
 	private Style style;
+	
+	@PrePersist @PreUpdate
+	private void prePersistUpdate() {
+		sku = sku.toUpperCase();
+	}
 
 	public Long getId() {
 		return id;
