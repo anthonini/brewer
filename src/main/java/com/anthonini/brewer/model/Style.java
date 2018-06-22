@@ -24,7 +24,7 @@ public class Style implements Serializable {
 	@Column(name = "id_style")
 	private Long id;
 	
-	@NotBlank
+	@NotBlank(message = "Nome é obrigatório")
 	@Size(max = 20, message = "O tamanho do nome não pode ser maior que {max} caracteres")
 	private String name;
 	
