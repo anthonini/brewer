@@ -52,12 +52,8 @@ public class StyleController {
 		if(bindingResult.hasErrors()) {
 			return ResponseEntity.badRequest().body(bindingResult.getFieldError("name").getDefaultMessage());
 		}
-		
-		try {
-			styleService.save(style);
-		}catch (StyleNameAlreadyRegisteredException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+
+		styleService.save(style);
 		
 		return ResponseEntity.ok(style);
 	}
