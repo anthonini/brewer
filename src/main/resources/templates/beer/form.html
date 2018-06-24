@@ -44,9 +44,9 @@
 
 				<div class="row">
 					<div class="col-xs-3  form-group" th:classappend="${#fields.hasErrors('style')} ? has-error">
-						<label for="estilo" class="control-label">Estilo</label>
+						<label for="style" class="control-label">Estilo</label>
 						<div class="bw-field-action">
-							<select id="estilo" class="form-control" th:field="*{style}">
+							<select id="style" class="form-control" th:field="*{style}">
 								<option value="">Selecione o estilo</option>
 								<option th:each="style : ${styles}" th:value="${style.id}" th:text="${style.name}"></option>
 							</select>
@@ -117,5 +117,9 @@
 		
 		<div th:replace="~{style/fastStyleRegister :: modal}"></div>
 	</section>
+	
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/style.fast-register.js}"></script>
+	</th:block>
 </body>
 </html>
