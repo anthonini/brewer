@@ -3,7 +3,8 @@
 	xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/layout-default}">
+	layout:decorate="~{layout/layout-default}"
+	xmlns:brewer="http://brewer.anthonini.com">
 	
 <head>
 	<title>Cadastro de Estilo</title>
@@ -20,14 +21,12 @@
 		</div>
 
 		<div class="container-fluid">
-			
-			<th:block th:include="fragments/SuccessMessage"></th:block>
 			<form method="POST" th:object="${style}" class="form-vertical  js-form-loading">
-				<th:block th:include="fragments/ValidationErrorMessages"></th:block>
+				<brewer:message/>
 				
 				<div class="row">					
 					<div class="col-xs-12 form-group">
-						<label for="name" th:classappend="${#fields.hasErrors('name')} ? has-error">Nome</label>
+						<label for="name" brewer:classforerror="name">Nome</label>
 						<input id="name" type="text" class="form-control" th:field="*{name}"/>
 					</div>
 				</div>
