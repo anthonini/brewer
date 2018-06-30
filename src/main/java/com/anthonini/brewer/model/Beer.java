@@ -80,6 +80,11 @@ public class Beer implements Serializable {
 	@JoinColumn(name = "id_style")
 	private Style style;
 	
+	private String photo;
+	
+	@Column(name = "content_type")
+	private String contentType;
+	
 	@PrePersist @PreUpdate
 	private void prePersistUpdate() {
 		sku = sku.toUpperCase();
@@ -171,6 +176,22 @@ public class Beer implements Serializable {
 
 	public void setStyle(Style style) {
 		this.style = style;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 	@Override
