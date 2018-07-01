@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.model.Flavor;
 import com.anthonini.brewer.model.Origin;
+import com.anthonini.brewer.repository.BeerRepository;
 import com.anthonini.brewer.repository.StyleRepository;
 import com.anthonini.brewer.service.BeerService;
 
@@ -26,6 +27,9 @@ public class BeerController {
 	
 	@Autowired
 	private BeerService beerService;
+	
+	@Autowired
+	private BeerRepository beerRepository;
 
 	@GetMapping("/new")
 	public ModelAndView form(Beer beer) {
@@ -47,5 +51,16 @@ public class BeerController {
 		beerService.save(beer);
 		
 		return new ModelAndView("redirect:new");
+	}
+	
+	@GetMapping
+	public ModelAndView list() {
+		ModelAndView mv = new ModelAndView("beer/list");
+		mv.addObject("flavors", Flavor.values());
+		mv.addObject("styles", styleRepository.findAll());
+		mv.addObject("origins", Origin.values());
+		mv.addObject("beers", beerRepository.findAll());
+		
+		return mv;
 	}
 }

@@ -57,3 +57,41 @@
     
     font-size: 500px;
 }
+
+/*
+###################
+# SYSTEMS PAGE
+###################
+*/
+
+/* Colunas - Pesquisa de Cervejas */
+.table-beer-col-photo {
+	min-width: 50px;
+	width: 50px
+}
+
+.table-beer-col-sku {
+	width: 90px;
+	text-align: center;
+}
+
+.table-beer-col-name {
+	
+}
+
+.table-beer-col-estilo {
+	width: 120px;
+}
+
+.table-beer-col-origem {
+	width: 100px;
+}
+
+.table-beer-col-value {
+	width: 100px;
+	text-align: right;
+}
+
+.table-beer-col-acoes {
+	width: 80px;
+}
