@@ -25,9 +25,9 @@
 				<brewer:message/>
 				
 				<div class="row">					
-					<div class="col-xs-12 form-group">
-						<label for="name" brewer:classforerror="name">Nome</label>
-						<input id="name" type="text" class="form-control" th:field="*{name}"/>
+					<div class="col-xs-12 form-group bw-required">
+						<label for="name" class="control-label" brewer:classforerror="name">Nome</label>
+						<input id="name" type="text" class="form-control" th:field="*{name}" autofocus="autofocus"/>
 					</div>
 				</div>
 				

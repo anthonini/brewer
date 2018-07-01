@@ -22,15 +22,15 @@
 		<div class="container-fluid">
 			<form method="POST" th:object="${city}" class="form-vertical  js-form-loading">
 				<div class="row">
-					<div class="col-xs-4 form-group">
-						<label for="state">Estado</label>
+					<div class="col-sm-4 form-group bw-required">
+						<label for="state" class="control-label">Estado</label>
 						<select id="state" class="form-control">
 							<option value="">Selecione o estado</option>
 						</select>
 					</div>
 					
-					<div class="col-xs-8 form-group">
-						<label for="name">Nome</label>
+					<div class="col-sm-8 form-group bw-required">
+						<label for="name" class="control-label">Nome</label>
 						<input id="name" type="text" class="form-control"/>
 					</div>
 				</div>

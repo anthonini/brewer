@@ -25,36 +25,36 @@
 			<form method="POST" th:object="${usuario}" class="form-vertical  js-form-loading">
 		
 				<div class="row">
-					<div class="col-xs-12  form-group">
-						<label for="nome">Nome</label>
+					<div class="col-sm-12  form-group bw-required">
+						<label for="nome" class="control-label">Nome</label>
 						<input id="nome" type="text" class="form-control"/>
 					</div>
 				</div>
 	
 				<div class="row">
-					<div class="col-xs-6 form-group">
-						<label for="email">E-mail</label>
+					<div class="col-sm-6 form-group bw-required">
+						<label for="email"  class="control-label">E-mail</label>
 						<input id="email" type="text" class="form-control"/>
 					</div>
 					
-					<div class="col-xs-3 form-group">
-						<label for="birthDate">Data de nascimento</label>
+					<div class="col-sm-3 form-group bw-required">
+						<label for="birthDate" class="control-label">Data de nascimento</label>
 						<input id="birthDate" type="text" class="form-control"/>
 					</div>
 				</div>
 				
 				<div class="row">
-					<div class="col-xs-3 form-group">
-						<label for="password">Senha</label>
+					<div class="col-sm-3 form-group bw-required">
+						<label for="password" class="control-label">Senha</label>
 						<input id="password" type="password" class="form-control"/>
 					</div>
 					
-					<div class="col-xs-3 form-group">
-						<label for="passwordConfirmation">Confirmação de senha</label>
+					<div class="col-sm-3 form-group bw-required">
+						<label for="passwordConfirmation" class="control-label">Confirmação de senha</label>
 						<input id="passwordConfirmation" type="password" class="form-control"/>
 					</div>
 					
-					<div class="col-xs-3 form-group">
+					<div class="col-sm-3 form-group">
 						<label for="status">Status</label>
 						<div>
 							<input type="checkbox" id="status" class="js-status"
@@ -64,7 +64,7 @@
 				</div>
 				
 				<div class="row">
-					<div class="col-xs-4 form-group">
+					<div class="col-sm-4 form-group">
 						<label for="personType">Grupos</label>
 						<div>
 							<div class="checkbox checkbox-inline">
