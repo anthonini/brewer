@@ -23,6 +23,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.util.StringUtils;
+
 import com.anthonini.brewer.validation.SKU;
 
 @Entity
@@ -192,6 +194,10 @@ public class Beer implements Serializable {
 
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
+	}
+	
+	public String getPhotoOrMock() {
+		return !StringUtils.isEmpty(photo) ? photo : "beer-mock.png";
 	}
 
 	@Override

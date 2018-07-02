@@ -15,7 +15,7 @@ import com.anthonini.brewer.storage.PhotoStorage;
 import com.anthonini.brewer.storage.PhotoStorageRunnable;
 
 @RestController
-@RequestMapping("/photo")
+@RequestMapping("/photos")
 public class PhotosController {
 
 	@Autowired
@@ -34,5 +34,10 @@ public class PhotosController {
 	@GetMapping("/temp/{name:.*}")
 	public byte[] getTemporaryPhoto(@PathVariable String name) {
 		return photoStorage.recoverTemporaryPhoto(name);
+	}
+	
+	@GetMapping("/{name:.*}")
+	public byte[] getPhoto(@PathVariable String name) {
+		return photoStorage.recovery(name);
 	}
 }

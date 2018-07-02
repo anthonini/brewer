@@ -14,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.anthonini.brewer.storage.PhotoStorage;
 
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.name.Rename;
+
 public class PhotoStorageLocal implements PhotoStorage {
 
 	private static final Logger logger = LoggerFactory.getLogger(PhotoStorageLocal.class);
@@ -68,7 +71,32 @@ public class PhotoStorageLocal implements PhotoStorage {
 			return Files.readAllBytes(this.temporaryPath.resolve(name));
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new RuntimeException("Error reading temporary photo.");
+			throw new RuntimeException("Error reading temporary photo.", e);
+		}
+	}
+	
+	@Override
+	public void save(String photo) {
+		try {
+			Files.move(this.temporaryPath.resolve(photo),this.path.resolve(photo));
+		} catch (IOException e) {
+			throw new RuntimeException("Error moving photo to final destination.", e);
+		}
+		
+		try {
+			Thumbnails.of(this.path.resolve(photo).toString()).size(40, 68).toFiles(Rename.PREFIX_DOT_THUMBNAIL);
+		} catch (IOException e) {
+			throw new RuntimeException("Erro generating thumbnail", e);
+		}
+	}
+	
+	@Override
+	public byte[] recovery(String name) {
+		try {
+			return Files.readAllBytes(this.path.resolve(name));
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error reading photo.", e);
 		}
 	}
 

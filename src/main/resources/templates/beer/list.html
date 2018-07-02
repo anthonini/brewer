@@ -90,7 +90,7 @@
 			
 			<button type="submit" class="btn  btn-primary">Pesquisar</button>
 		</form>
-		<br/>
+
 		<div class="table-responsive  bw-tabela-simples">
 			<table class="table  table-hover">
 				<thead>
@@ -108,7 +108,7 @@
 				<tbody>
 					<tr th:each="beer : ${beers}">
 						<td class="text-center">
-							<img th:src="@{/photo/temp/{photo}(photo=${beer.photo})}" class="img-responsive"/>
+							<img th:src="@{/photos/thumbnail.{photo}(photo=${beer.photoOrMock})}" class="img-responsive"/>
 						</td>
 						<td class="text-center" th:text="${beer.sku}">AA1234</td>
 						<td th:text="${beer.name}">Cerveja Stella</td>
@@ -123,6 +123,9 @@
 								<i class="glyphicon glyphicon-remove"></i>
 							</a>
 						</td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(beers)}">
+						<td colspan="7"><i>Nenhuma cerveja encontrada.</i></td>
 					</tr>
 				</tbody>
 			</table>
