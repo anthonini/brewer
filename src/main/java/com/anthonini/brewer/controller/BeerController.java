@@ -16,6 +16,7 @@ import com.anthonini.brewer.model.Flavor;
 import com.anthonini.brewer.model.Origin;
 import com.anthonini.brewer.repository.BeerRepository;
 import com.anthonini.brewer.repository.StyleRepository;
+import com.anthonini.brewer.repository.filter.BeerFilter;
 import com.anthonini.brewer.service.BeerService;
 
 @Controller
@@ -54,12 +55,12 @@ public class BeerController {
 	}
 	
 	@GetMapping
-	public ModelAndView list() {
+	public ModelAndView list(BeerFilter beerFilter, BindingResult bindingResult) {
 		ModelAndView mv = new ModelAndView("beer/list");
 		mv.addObject("flavors", Flavor.values());
 		mv.addObject("styles", styleRepository.findAll());
 		mv.addObject("origins", Origin.values());
-		mv.addObject("beers", beerRepository.findAll());
+		mv.addObject("beers", beerRepository.filter(beerFilter));
 		
 		return mv;
 	}
