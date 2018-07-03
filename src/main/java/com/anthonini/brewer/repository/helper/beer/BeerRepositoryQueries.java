@@ -1,11 +1,12 @@
 package com.anthonini.brewer.repository.helper.beer;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.repository.filter.BeerFilter;
 
 public interface BeerRepositoryQueries {
 
-	public List<Beer> filter(BeerFilter filter);
+	public Page<Beer> filter(BeerFilter filter, Pageable pageable);
 }

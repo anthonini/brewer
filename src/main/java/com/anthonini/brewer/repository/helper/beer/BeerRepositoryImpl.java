@@ -5,12 +5,15 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import com.anthonini.brewer.model.Beer;
@@ -22,11 +25,29 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 	private EntityManager manager;
 	
 	@Override
-	public List<Beer> filter(BeerFilter filter) {
+	public Page<Beer> filter(BeerFilter filter, Pageable pageable) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Beer> criteriaQuery = builder.createQuery(Beer.class);
 		Root<Beer> beer = criteriaQuery.from(Beer.class);
 		
+		TypedQuery<Beer> query =  manager.createQuery(criteriaQuery.where(getWhere(filter, builder, beer)));
+		query.setFirstResult(pageable.getPageNumber()*pageable.getPageSize());
+		query.setMaxResults(pageable.getPageSize());
+		
+		return new PageImpl<>(query.getResultList(), pageable, total(filter));
+	}
+	
+	private Long total(BeerFilter filter) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+		Root<Beer> beer = criteriaQuery.from(Beer.class);
+		
+		criteriaQuery.select(builder.count(beer)).where(getWhere(filter, builder, beer));
+		
+		return manager.createQuery(criteriaQuery).getSingleResult();
+	}
+
+	private Predicate[] getWhere(BeerFilter filter, CriteriaBuilder builder, Root<Beer> beer) {
 		List<Predicate> where = new ArrayList<>();
 		
 		if(filter != null) {			
@@ -59,7 +80,7 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 			}
 		}
 		
-		return manager.createQuery(criteriaQuery.where(where.stream().toArray(Predicate[]::new))).getResultList();
+		return where.stream().toArray(Predicate[]::new);
 	}
 
 	private boolean hasStyle(BeerFilter filter) {

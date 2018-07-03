@@ -1,8 +1,11 @@
 package com.anthonini.brewer.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.anthonini.brewer.controller.page.PageWrapper;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.model.Flavor;
 import com.anthonini.brewer.model.Origin;
@@ -55,12 +59,15 @@ public class BeerController {
 	}
 	
 	@GetMapping
-	public ModelAndView list(BeerFilter beerFilter, BindingResult bindingResult) {
+	public ModelAndView list(BeerFilter beerFilter, BindingResult bindingResult,
+			@PageableDefault(size = 2) Pageable pageable, HttpServletRequest httpServletRequest) {
 		ModelAndView mv = new ModelAndView("beer/list");
 		mv.addObject("flavors", Flavor.values());
 		mv.addObject("styles", styleRepository.findAll());
 		mv.addObject("origins", Origin.values());
-		mv.addObject("beers", beerRepository.filter(beerFilter));
+		
+		PageWrapper<Beer> pageWrapper = new PageWrapper<>(beerRepository.filter(beerFilter, pageable), httpServletRequest);
+		mv.addObject("page", pageWrapper);
 		
 		return mv;
 	}
