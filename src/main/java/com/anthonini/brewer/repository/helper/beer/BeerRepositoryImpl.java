@@ -14,6 +14,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 
 import com.anthonini.brewer.model.Beer;
@@ -30,7 +31,16 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 		CriteriaQuery<Beer> criteriaQuery = builder.createQuery(Beer.class);
 		Root<Beer> beer = criteriaQuery.from(Beer.class);
 		
-		TypedQuery<Beer> query =  manager.createQuery(criteriaQuery.where(getWhere(filter, builder, beer)));
+		criteriaQuery.where(getWhere(filter, builder, beer));
+		
+		Sort sort = pageable.getSort();
+		if (sort != null) {
+			Sort.Order order = sort.iterator().next();
+			String property = order.getProperty();
+			criteriaQuery.orderBy(order.isAscending() ? builder.asc(beer.get(property)) : builder.desc(beer.get(property)));
+		}
+		
+		TypedQuery<Beer> query =  manager.createQuery(criteriaQuery);
 		query.setFirstResult(pageable.getPageNumber()*pageable.getPageSize());
 		query.setMaxResults(pageable.getPageSize());
 		
