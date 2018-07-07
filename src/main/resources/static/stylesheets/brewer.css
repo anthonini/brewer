@@ -80,6 +80,11 @@
 ###################
 */
 
+/* Colunas comuns */
+.table-col-acoes {
+	width: 80px;
+}
+
 /* Colunas - Pesquisa de Cervejas */
 .table-beer-col-photo {
 	min-width: 50px;
@@ -109,5 +114,10 @@
 }
 
 .table-beer-col-acoes {
+	width: 80px;
+}
+
+/* Colunas - Pesquisa de Estilos */
+.table-style-col-codigo {
 	width: 80px;
 }

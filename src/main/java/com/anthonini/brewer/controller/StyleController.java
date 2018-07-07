@@ -1,8 +1,11 @@
 package com.anthonini.brewer.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,9 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.anthonini.brewer.controller.page.PageWrapper;
 import com.anthonini.brewer.model.Style;
+import com.anthonini.brewer.repository.StyleRepository;
+import com.anthonini.brewer.repository.filter.StyleFilter;
 import com.anthonini.brewer.service.StyleService;
 import com.anthonini.brewer.service.exception.StyleNameAlreadyRegisteredException;
 
@@ -24,6 +31,9 @@ public class StyleController {
 	
 	@Autowired
 	StyleService styleService;
+	
+	@Autowired
+	StyleRepository styleRepository;
 
 	@GetMapping("/new")
 	public String form(Style style) {
@@ -56,5 +66,16 @@ public class StyleController {
 		styleService.save(style);
 		
 		return ResponseEntity.ok(style);
+	}
+	
+	@GetMapping
+	public ModelAndView list(StyleFilter styleFilter, BindingResult bindingResult,
+			@PageableDefault(size = 2) Pageable pageable, HttpServletRequest httpServletRequest) {
+		ModelAndView mv = new ModelAndView("style/list");
+		
+		PageWrapper<Style> pageWrapper = new PageWrapper<>(styleRepository.filter(styleFilter, pageable), httpServletRequest);
+		mv.addObject("page", pageWrapper);
+		
+		return mv;
 	}
 }
