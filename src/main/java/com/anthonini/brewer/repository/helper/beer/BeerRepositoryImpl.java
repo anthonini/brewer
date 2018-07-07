@@ -29,7 +29,8 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 	public Page<Beer> filter(BeerFilter filter, Pageable pageable) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Beer> criteriaQuery = builder.createQuery(Beer.class);
-		Root<Beer> beer = criteriaQuery.from(Beer.class);
+		Root<Beer> beer = criteriaQuery.from(Beer.class);		
+		beer.fetch("style");
 		
 		criteriaQuery.where(getWhere(filter, builder, beer));
 		
