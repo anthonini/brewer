@@ -11,19 +11,23 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.repository.filter.BeerFilter;
+import com.anthonini.brewer.repository.pagination.PaginationUtil;
 
 public class BeerRepositoryImpl implements BeerRepositoryQueries {
 
 	@PersistenceContext
 	private EntityManager manager;
+	
+	@Autowired
+	private PaginationUtil<Beer> paginationUtil;
 	
 	@Override
 	public Page<Beer> filter(BeerFilter filter, Pageable pageable) {
@@ -34,16 +38,7 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 		
 		criteriaQuery.where(getWhere(filter, builder, beer));
 		
-		Sort sort = pageable.getSort();
-		if (sort != null) {
-			Sort.Order order = sort.iterator().next();
-			String property = order.getProperty();
-			criteriaQuery.orderBy(order.isAscending() ? builder.asc(beer.get(property)) : builder.desc(beer.get(property)));
-		}
-		
-		TypedQuery<Beer> query =  manager.createQuery(criteriaQuery);
-		query.setFirstResult(pageable.getPageNumber()*pageable.getPageSize());
-		query.setMaxResults(pageable.getPageSize());
+		TypedQuery<Beer> query = paginationUtil.prepare(builder, criteriaQuery, beer, pageable);
 		
 		return new PageImpl<>(query.getResultList(), pageable, total(filter));
 	}
