@@ -62,7 +62,11 @@ public class Client implements Serializable {
 	
 	@PrePersist @PreUpdate
 	private void prePersistPreUpdate() {
-		this.cpfCnpj = this.cpfCnpj.replaceAll("\\.|-|/", "");
+		this.cpfCnpj = PersonType.removeFormatting(this.cpfCnpj);
+	}
+	
+	public String getCpfCnpjWithoutFormatting() {
+		return PersonType.removeFormatting(this.cpfCnpj);
 	}
 
 	public Long getId() {

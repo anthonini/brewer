@@ -35,4 +35,8 @@ public enum PersonType {
 	public Class<?> getGroup() {
 		return group;
 	}
+	
+	public static String removeFormatting(String cpfCnpj) {
+		return cpfCnpj.replaceAll("\\.|-|/", "");
+	}
 }

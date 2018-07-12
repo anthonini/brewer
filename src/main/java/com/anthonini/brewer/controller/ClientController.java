@@ -15,6 +15,7 @@ import com.anthonini.brewer.model.Client;
 import com.anthonini.brewer.model.PersonType;
 import com.anthonini.brewer.repository.StateRepository;
 import com.anthonini.brewer.service.ClientService;
+import com.anthonini.brewer.service.exception.AlreadyRegisteredClientCpfCnpjException;
 
 @Controller
 @RequestMapping("/client")
@@ -41,9 +42,15 @@ public class ClientController {
 			return form(client);
 		}
 		
-		clientService.save(client);
-		redirectAttributes.addFlashAttribute("successMessage", "Client successfully saved!");
-		
-		return new ModelAndView("redirect:new");
+		try {
+			clientService.save(client);
+			
+			redirectAttributes.addFlashAttribute("successMessage", "Client successfully saved!");		
+			return new ModelAndView("redirect:new");
+
+		}catch (AlreadyRegisteredClientCpfCnpjException e) {
+			bindingResult.rejectValue("cpfCnpj", e.getMessage(), e.getMessage());
+			return form(client);
+		}
 	}
 }
