@@ -1,0 +1,21 @@
+package com.anthonini.brewer.controller.converter;
+
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.util.StringUtils;
+
+import com.anthonini.brewer.model.State;
+
+public class StateConverter implements Converter<String, State> {
+
+	@Override
+	public State convert(String id) {
+		if (!StringUtils.isEmpty(id)) {
+			State state = new State();
+			state.setId(Long.valueOf(id));
+			
+			return state;
+		}
+		
+		return null;
+	}
+}
