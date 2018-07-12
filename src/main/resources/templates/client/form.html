@@ -4,6 +4,7 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:data="http://www.thymeleaf.com/extras/data"
+	xmlns:brewer="http://brewer.anthonini.com"
 	layout:decorate="~{layout/layout-default}">
 	
 <head>
@@ -23,21 +24,23 @@
 		<div class="container-fluid">
 
 			<form method="POST" th:object="${client}" class="form-vertical  js-form-loading">
-		
+				<brewer:message/>
+				
 				<div class="row">
-					<div class="col-xs-12  form-group bw-required">
+					<div class="col-xs-12  form-group bw-required" brewer:classforerror="name">
 						<label for="nome" class="control-label">Nome</label>
-						<input id="nome" type="text" class="form-control"/>
+						<input id="nome" type="text" class="form-control" th:field="*{name}"/>
 					</div>
 				</div>
 	
 				<div class="row">
-					<div class="col-xs-4 form-group bw-required">
+					<div class="col-xs-4 form-group bw-required"  brewer:classforerror="personType">
 						<label for="personType" class="control-label">Tipo de pessoa</label>
 						<div>
 							<th:block th:each="personType : ${personTypes}">
 								<div class="radio  radio-inline">
-									<input type="radio" th:id="|${personType}|" class="js-person-type-radio" 
+									<input type="radio" th:id="|${personType}|" class="js-person-type-radio"
+										th:field="*{personType}" th:value="${personType}"
 										name="personType" data:document="${personType.document}" data:mascara="${personType.mask}"> 
 									<label class="control-label" th:for="|${personType}|" th:text="${personType.description}">Física</label>
 								</div>
@@ -45,59 +48,60 @@
 						</div>
 					</div>
 					
-					<div class="col-xs-8 form-group bw-required">
+					<div class="col-xs-8 form-group bw-required" brewer:classforerror="cpfCnpj">
 						<label for="cpfCnpj" class="control-label">CPF/CNPJ</label>
-						<input id="cpfCnpj" type="text" class="form-control" disabled/>
+						<input id="cpfCnpj" type="text" class="form-control" disabled th:field="*{cpfCnpj}"/>
 					</div>
 				</div>
 				
 				<div class="row">
-					<div class="col-xs-4 form-group bw-required">
+					<div class="col-xs-4 form-group">
 						<label for="phone" class="control-label">Telefone</label>
-						<input id="phone" type="text" class="form-control js-phone-number"/>
+						<input id="phone" type="text" class="form-control js-phone-number" th:field="*{phone}"/>
 					</div>
 					
-					<div class="col-xs-8 form-group bw-required">
+					<div class="col-xs-8 form-group" brewer:classforerror="email">
 						<label for="email" class="control-label">E-mail</label>
-						<input id="email" type="text" class="form-control"/>
+						<input id="email" type="text" class="form-control" th:field="*{email}"/>
 					</div>
 				</div>
 				
 				<div class="row">
-					<div class="col-xs-4 form-group bw-required">
+					<div class="col-xs-4 form-group">
 						<label for="address" class="control-label">Logradouro</label>
-						<input id="address" type="text" class="form-control"/>
+						<input id="address" type="text" class="form-control"  th:field="*{address.address}"/>
 					</div>
 					
-					<div class="col-xs-4 form-group bw-required">
+					<div class="col-xs-4 form-group">
 						<label for="number" class="control-label">Número</label>
-						<input id="number" type="text" class="form-control"/>
+						<input id="number" type="text" class="form-control" th:field="*{address.number}"/>
 					</div>
 					
-					<div class="col-xs-4 form-group bw-required">
+					<div class="col-xs-4 form-group">
 						<label for="address-line-2" class="control-label">Complemento</label>
-						<input id="address-line-2" type="text" class="form-control"/>
+						<input id="address-line-2" type="text" class="form-control" th:field="*{address.address_2}"/>
 					</div>
 				</div>
 				
 				<div class="row">
-					<div class="col-xs-4 form-group bw-required">
+					<div class="col-xs-4 form-group">
 						<label for="cep" class="control-label">CEP</label>
-						<input id="cep" type="text" class="form-control js-cep"/>
+						<input id="cep" type="text" class="form-control js-cep" th:field="*{address.zipCode}"/>
 					</div>
 					
-					<div class="col-xs-4 form-group bw-required">
+					<div class="col-xs-4 form-group">
 						<label for="state" class="control-label">Estado</label>
-						<select id="state" class="form-control">
+						<select id="state" class="form-control" th:field="*{address.state}">
 							<option value="">Selecione o estado</option>
 							 <option th:each="state : ${states}" th:value="${state.id}" th:text="${state.name}">Estado</option>
 						</select>
 					</div>
 					
-					<div class="col-xs-4 form-group bw-required">
+					<div class="col-xs-4 form-group">
 						<label for="city" class="control-label">Cidade</label>
 						<div class="bw-field-action">
-							<select id="city" class="form-control" data:url="@{/city}">
+							<input type="hidden" id="inputHiddenSelectedCity" th:value="*{address.city} != null ? *{address.city.id}">
+							<select id="city" class="form-control" data:url="@{/city}" th:field="*{address.city}">
 								<option value="">Selecione a cidade</option>
 							</select>
 							

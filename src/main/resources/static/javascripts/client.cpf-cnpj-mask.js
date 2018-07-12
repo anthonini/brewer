@@ -13,7 +13,7 @@ Brewer.CpfCnpjMask = (function() {
 		
 		var selectedPersonType = this.personTypeRadio.filter(':checked')[0];
 		if( selectedPersonType ) {
-			applyMask.call(this, $(selectedPersonType));
+			applyCpfCnpjMask.call(this, $(selectedPersonType));
 		}
 	}
 	

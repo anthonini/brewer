@@ -25,14 +25,21 @@ Brewer.CityCombo = (function() {
 		this.stateCombo = stateCombo;
 		this.combo = $('#city');
 		this.imgLoading = $('.js-img-loading');
+		this.inputHiddenSelectedCity = $('#inputHiddenSelectedCity');
 	}
 	
 	CityCombo.prototype.start = function() {
-		reset.call(this);
 		this.stateCombo.on('change', onStateChanged.bind(this));
+		var stateId = this.stateCombo.combo.val();
+		initializeCities.call(this, stateId);
 	}
 	
 	function onStateChanged(evento, stateId) {
+		this.inputHiddenSelectedCity.val('');
+		initializeCities.call(this, stateId);
+	}
+	
+	function initializeCities(stateId) {
 		if(stateId) {
 			var answer = $.ajax({
 				url: this.combo.data('url'),
@@ -57,6 +64,11 @@ Brewer.CityCombo = (function() {
 		
 		this.combo.html(options.join(''));
 		this.combo.removeAttr('disabled');
+		
+		var selectedCityId = this.inputHiddenSelectedCity.val();
+		if( selectedCityId ) {
+			this.combo.val(selectedCityId);
+		}
 	}
 	
 	function reset() {
