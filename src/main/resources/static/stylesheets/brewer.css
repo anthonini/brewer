@@ -121,3 +121,13 @@
 .table-style-col-codigo {
 	width: 80px;
 }
+
+/* Colunas - Pesquisa de cidades */
+.table-city-col-name {
+	
+}
+
+.table-city-col-name-state {
+	width: 140px;
+	text-align: right;
+}

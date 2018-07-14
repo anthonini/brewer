@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.anthonini.brewer.model.City;
 import com.anthonini.brewer.model.State;
+import com.anthonini.brewer.repository.helper.city.CityRepositoryQueries;
 
-public interface CityRepository extends JpaRepository<City, Long>{
+public interface CityRepository extends JpaRepository<City, Long>, CityRepositoryQueries {
 
 	public List<City> findByStateIdOrderByName(Long stateId);
 	

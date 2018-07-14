@@ -5,6 +5,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import org.springframework.data.domain.Pageable;
@@ -21,8 +22,7 @@ public class PaginationUtil<T> {
 		Sort sort = pageable.getSort();
 		if (sort != null) {
 			Sort.Order order = sort.iterator().next();
-			String property = order.getProperty();
-			criteriaQuery.orderBy(order.isAscending() ? builder.asc(root.get(property)) : builder.desc(root.get(property)));
+			criteriaQuery.orderBy(order.isAscending() ? builder.asc(getPath(order, root)) : builder.desc(getPath(order, root)));
 		}
 		
 		TypedQuery<T> query =  manager.createQuery(criteriaQuery);
@@ -30,5 +30,17 @@ public class PaginationUtil<T> {
 		query.setMaxResults(pageable.getPageSize());
 		
 		return query;
+	}
+	
+	private Path<T> getPath(Sort.Order order, Root<T> root) {
+		String property = order.getProperty();
+		String[] attributes = property.split("\\.");
+		
+		Path<T> path = null;
+		for (String attribute : attributes) {
+			path = path == null ? root.get(attribute) : path.get(attribute);
+		}
+		
+		return path;
 	}
 }
