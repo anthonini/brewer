@@ -35,6 +35,10 @@ public class City implements Serializable {
 	@JoinColumn(name = "id_state")
 	@JsonIgnore
 	private State state;
+	
+	public boolean hasState() {
+		return state != null;
+	}
 
 	public Long getId() {
 		return id;

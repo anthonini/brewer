@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
@@ -48,6 +50,7 @@ public class CityController {
 		return mv;
 	}
 	
+	@Cacheable(value = "cities", key = "#stateId")
 	@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<City> listByStateId(@RequestParam(name = "state", defaultValue = "-1") Long stateId){
 		try {
@@ -57,6 +60,7 @@ public class CityController {
 	}
 	
 	@PostMapping("/new")
+	@CacheEvict(value = "cities", key = "#city.state.id", condition = "#city.hasState()")
 	public ModelAndView save(@Valid City city, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			return form(city);
