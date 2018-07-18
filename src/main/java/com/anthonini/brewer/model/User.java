@@ -16,8 +16,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import com.anthonini.brewer.validation.ConfirmationAttribute;
+
+@ConfirmationAttribute(attribute = "password", confirmationAttribute = "passwordConfirmation", message = "Confirmação da senha não confere")
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
@@ -48,11 +51,15 @@ public class User implements Serializable {
 	@Column(name = "birth_date")
 	private LocalDate birthDate;
 	
-	@NotNull(message = "Selecione pelo menos um grupo")
+	@Size(min = 1, message = "Selecione pelo menos um grupo")
 	@ManyToMany
 	@JoinTable(name = "user_group_user", joinColumns = @JoinColumn(name = "id_user")
 				,inverseJoinColumns = @JoinColumn(name = "id_user_group"))
 	private List<UserGroup> groups;
+	
+	public boolean isNew() {
+		return this.id == null;
+	}
 	
 	public Long getId() {
 		return id;

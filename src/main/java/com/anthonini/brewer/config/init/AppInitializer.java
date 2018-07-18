@@ -6,6 +6,7 @@ import javax.servlet.ServletRegistration.Dynamic;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.anthonini.brewer.config.JPAConfig;
+import com.anthonini.brewer.config.SecurityConfig;
 import com.anthonini.brewer.config.ServiceConfig;
 import com.anthonini.brewer.config.WebConfig;
 
@@ -17,7 +18,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] { JPAConfig.class, ServiceConfig.class };
+		return new Class<?>[] { JPAConfig.class, ServiceConfig.class, SecurityConfig.class };
 	}
 
 	@Override
