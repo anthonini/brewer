@@ -1,8 +1,11 @@
 package com.anthonini.brewer.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.anthonini.brewer.controller.page.PageWrapper;
 import com.anthonini.brewer.model.User;
 import com.anthonini.brewer.repository.UserGroupRepository;
+import com.anthonini.brewer.repository.UserRepository;
+import com.anthonini.brewer.repository.filter.UserFilter;
 import com.anthonini.brewer.service.UserService;
 import com.anthonini.brewer.service.exception.UserEmailAlreadyRegisteredException;
 
@@ -25,6 +31,9 @@ public class UserController {
 	
 	@Autowired
 	private UserGroupRepository userGroupRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@GetMapping("/new")
 	public ModelAndView create(User user) {
@@ -49,5 +58,16 @@ public class UserController {
 			return create(user);
 		}
 	}
-	
+
+	@GetMapping
+	public ModelAndView list(UserFilter userFilter, BindingResult bindingResult,
+			@PageableDefault(size = 2) Pageable pageable, HttpServletRequest httpServletRequest) {
+		ModelAndView mv = new ModelAndView("user/list");
+		mv.addObject("userGroups", userGroupRepository.findAll());
+		
+		PageWrapper<User> pageWrapper = new PageWrapper<>(userRepository.filter(userFilter, pageable), httpServletRequest);
+		mv.addObject("page", pageWrapper);
+		
+		return mv;
+	}
 }

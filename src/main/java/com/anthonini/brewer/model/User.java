@@ -61,6 +61,10 @@ public class User implements Serializable {
 		return this.id == null;
 	}
 	
+	public String getStatus() {
+		return active ? "Ativo" : "Inativo";
+	}
+	
 	public Long getId() {
 		return id;
 	}

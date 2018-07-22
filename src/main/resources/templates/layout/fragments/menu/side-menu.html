@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://www.thymeleaf.org"
-	xmlns:brewer="http://brewer.anthonini.com">
+	xmlns:brewer="http://brewer.anthonini.com"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	
 <body>
 <aside class="aw-layout-sidebar  js-sidebar" th:fragment="side-menu">
@@ -43,8 +44,8 @@
 			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/client}">
 			            	<a th:href="@{/client}">Clientes</a>
 			            </li>
-			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/user}">
-			            	<a th:href="@{/user/new}">Usuários</a>
+			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/user}" sec:authorize="hasRole('ROLE_REGISTER_USER')">
+			            	<a th:href="@{/user}">Usuários</a>
 			            </li>
           			</ul>
         		</li>
