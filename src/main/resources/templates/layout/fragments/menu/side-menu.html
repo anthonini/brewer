@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt"
-	xmlns="http://www.w3.org/1999/xhtml"
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	xmlns:brewer="http://brewer.anthonini.com">
 	
+<body>
 <aside class="aw-layout-sidebar  js-sidebar" th:fragment="side-menu">
 	<div class="aw-layout-sidebar__content">
 
@@ -14,32 +14,38 @@
           			<a href="dashboard.html"><i class="fa  fa-fw  fa-home"></i><span>Dashboard</span></a>
         		</li>
 
-        		<li class="aw-menu__item  is-active">
+        		<li class="aw-menu__item">
           			<a href="#">
-            			<i class="fa  fa-fw  fa-file-text"></i><span>Cadastros</span>
+            			<i class="fa  fa-fw  fa-truck"></i><span>Estoque</span>
             			<i class="aw-menu__navigation-icon  fa"></i>
           			</a>
       
           			<ul class="aw-menu__list  aw-menu__list--sublist">
-			            <li class="aw-menu__item  aw-menu__item--link"><a href="cadastro-produto.html">Cadastro de produto</a></li>
-			            <li class="aw-menu__item  aw-menu__item--link  is-active"><a href="pesquisa-produtos.html">Pesquisa de produtos</a></li>
-			            <li class="aw-menu__item  aw-menu__item--link"><a href="tabela-sem-dados.html">Tabela sem dados</a></li>
+			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/style}">
+			            	<a th:href="@{/style}">Estilos</a>
+			            </li>
+			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/beer}">
+			            	<a th:href="@{/beer}">Cervejas</a>
+			            </li>
           			</ul>
         		</li>
 
-        		<li class="aw-menu__item  is-expanded">
+        		<li class="aw-menu__item">
           			<a href="#">
-            			<i class="fa  fa-fw  fa-file-text"></i><span>Páginas comuns</span>
+            			<i class="fa  fa-fw  fa-database"></i><span>Cadastros</span>
             			<i class="aw-menu__navigation-icon  fa"></i>
           			</a>
 
           			<ul class="aw-menu__list  aw-menu__list--sublist">
-			            <li class="aw-menu__item  aw-menu__item--link"><a href="pagina-vazia.html">Página vazia</a></li>
-			            <li class="aw-menu__item  aw-menu__item--link"><a href="login.html">Login</a></li>
-			            <li class="aw-menu__item  aw-menu__item--link"><a href="esqueceu-a-senha.html">Esqueceu a senha</a></li>
-			            <li class="aw-menu__item  aw-menu__item--link"><a href="403.html">403</a></li>
-			            <li class="aw-menu__item  aw-menu__item--link"><a href="404.html">404</a></li>
-			            <li class="aw-menu__item  aw-menu__item--link"><a href="500.html">500</a></li>
+			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/city}">
+			            	<a th:href="@{/city}">Cidades</a>
+			            </li>
+			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/client}">
+			            	<a th:href="@{/client}">Clientes</a>
+			            </li>
+			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/user}">
+			            	<a th:href="@{/user/new}">Usuários</a>
+			            </li>
           			</ul>
         		</li>
 
@@ -47,5 +53,5 @@
     	</nav>
 	</div>
 </aside>
-
+</body>
 </html>
