@@ -121,3 +121,24 @@
 .table-style-col-codigo {
 	width: 80px;
 }
+
+/* Colunas - Pesquisa de cidades */
+.table-city-col-name {
+	
+}
+
+.table-city-col-name-state {
+	width: 140px;
+	text-align: right;
+}
+
+/*
+##############################
+# COMPONENTS CUSTOMIZATION
+##############################
+*/
+
+.checkbox input[type="checkbox"]:checked + input + label::after {
+    font-family: 'FontAwesome';
+    content: "\f00c"; 
+}

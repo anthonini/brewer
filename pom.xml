@@ -53,6 +53,15 @@
 		
 		<!-- Thymeleaf extras data attribute -->
 		<thymeleaf-extras-data-attribute.version>2.0.1</thymeleaf-extras-data-attribute.version>
+		
+		<!-- Cache - Guava -->
+		<guava.version>23.0</guava.version>
+		
+		<!-- Apache Bean Utils -->
+		<commons-beanutils.version>1.9.3</commons-beanutils.version>
+		
+		<!-- Spring Security -->
+		<spring-security.version>4.2.7.RELEASE</spring-security.version>
 	</properties>
 	
 	<build>
@@ -207,6 +216,39 @@
     		<groupId>com.github.mxab.thymeleaf.extras</groupId>
     		<artifactId>thymeleaf-extras-data-attribute</artifactId>
     		<version>${thymeleaf-extras-data-attribute.version}</version>
+		</dependency>
+		
+		<!-- Cache - Guava -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
+		</dependency>
+		
+		<!-- Spring Context Support -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		
+		<!-- Apache Bean Utils -->
+		<dependency>
+    		<groupId>commons-beanutils</groupId>
+    		<artifactId>commons-beanutils</artifactId>
+    		<version>${commons-beanutils.version}</version>
+		</dependency>
+		
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-security.version}</version>
 		</dependency>
 	</dependencies>
 	

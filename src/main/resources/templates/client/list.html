@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout-default}"
+	xmlns:brewer="http://brewer.anthonini.com">
+	
+<head>
+	<title>Pesquisa de clientes</title>
+</head>
+
+<body>
+	<section layout:fragment="content">
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-10">
+						<h1>Pesquisa de clientes</h1>
+					</div>
+					
+					<div class="col-xs-2">
+						<div class="aw-page-header-controls">
+							<a class="btn  btn-default" th:href="@{/client/new}">
+								<i class="glyphicon  glyphicon-plus-sign"></i> <span class="hidden-xs  hidden-sm">Novo cliente</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+			<form method="GET" th:object="${clientFilter}">
+				<div class="row">
+					<div class="form-group  col-sm-8">
+						<label class="control-label" for="nome">Nome</label>
+						<input type="text" class="form-control" id="nome" autofocus="autofocus" th:field="*{name}"/>
+					</div>
+					
+					<div class="form-group  col-sm-4">
+						<label for="cpfCnpj" class="control-label">CPF/CNPJ</label>
+						<input type="text" class="form-control" id="cpfCnpj" th:field="*{cpfCnpj}"/>
+					</div>
+				</div>
+				
+				<button type="submit" class="btn  btn-primary">Pesquisar</button>
+			</form>
+			
+			<div class="table-responsive  bw-tabela-simples">
+				<table class="table  table-hover">
+					<thead>
+						<tr>
+							<th class="table-client-col-name">
+								<brewer:order page="${page}" field="name" text="Nome"/>
+							</th>
+							<th class="table-client-col-person-type">
+								<brewer:order page="${page}" field="personType" text="Tipo de Pessoa"/>
+							</th>
+							<th class="table-client-col-cpf-cnpj">CPF/CNPJ</th>
+							<th class="table-client-col-phone">Telefone</th>
+							<th class="table-client-col-city-state">Cidade/Estado</th>
+							<th class="table-col-acoes"></th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr th:each="client : ${page.content}">
+							<td th:text="${client.name}"></td>
+							<td class="text-center" th:text="${client.personType.description}">Física</td>
+							<td class="text-right" th:text="${client.cpfCnpj}">111.111.111-11</td>
+							<td class="text-right" th:text="${client.phone}">(11) 99999-9999</td>
+							<td class="text-right" th:text="${client.address.cityNameStateInitials}">Cidade/Estado</td>
+							<td class="text-center">
+								<a class="btn  btn-link  btn-xs" title="Editar"> 
+									<i class="glyphicon glyphicon-pencil"></i>
+								</a>
+								<a class="btn  btn-link  btn-xs" title="Excluir">
+									<i class="glyphicon glyphicon-remove"></i>
+								</a>
+							</td>
+						</tr>
+						<tr th:if="${page.empty}">
+							<td colspan="6"><i>Nenhum cliente encontrado.</i></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<brewer:pagination page="${page}"/>
+			
+		</div>
+	</section>
+
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/client.cpf-and-cnpj-mask.js}"></script>
+	</th:block>
+</body>
+</html>

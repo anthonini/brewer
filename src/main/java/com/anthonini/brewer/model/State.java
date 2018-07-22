@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "state")
-public class State implements Serializable {
+public class State implements Serializable, Comparable<State> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -71,5 +71,13 @@ public class State implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(State other) {
+		if(other == null)
+			return -1;
+		else
+			return this.getName().compareToIgnoreCase(other.getName());
 	}
 }

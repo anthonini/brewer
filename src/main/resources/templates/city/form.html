@@ -3,6 +3,7 @@
 	xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:brewer="http://brewer.anthonini.com"
 	layout:decorate="~{layout/layout-default}">
 	
 <head>
@@ -13,25 +14,38 @@
 	<section layout:fragment="content">	
 		<div class="page-header">
 			<div class="container-fluid">
-				<h1>
-					Cadastro de cidade
-				</h1>
+				<div class="row">
+					<div class="col-xs-10">
+						<h1>Cadastro de cidade</h1>
+					</div>
+				
+					<div class="col-xs-2">
+						<div class="aw-page-header-controls">
+							<a class="btn  btn-default" th:href="@{/city}">
+								<i class="glyphicon  glyphicon-search"></i> <span class="hidden-xs  hidden-sm">Pesquisa</span>
+							</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
 		<div class="container-fluid">
 			<form method="POST" th:object="${city}" class="form-vertical  js-form-loading">
+				<brewer:message/>
+				
 				<div class="row">
-					<div class="col-sm-4 form-group bw-required">
+					<div class="col-sm-4 form-group bw-required" brewer:classforerror="state">
 						<label for="state" class="control-label">Estado</label>
-						<select id="state" class="form-control">
+						<select id="state" class="form-control" th:field="*{state}">
 							<option value="">Selecione o estado</option>
+							<option th:each="state : ${states}" th:value="${state.id}" th:text="${state.name}">Estado</option>
 						</select>
 					</div>
 					
-					<div class="col-sm-8 form-group bw-required">
+					<div class="col-sm-8 form-group bw-required" brewer:classforerror="name">
 						<label for="name" class="control-label">Nome</label>
-						<input id="name" type="text" class="form-control"/>
+						<input id="name" type="text" class="form-control" th:field="*{name}"/>
 					</div>
 				</div>
 				
