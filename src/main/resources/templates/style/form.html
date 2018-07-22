@@ -31,7 +31,7 @@
 		</div>
 
 		<div class="container-fluid">
-			<form method="POST" th:object="${style}" class="form-vertical  js-form-loading">
+			<form method="POST" th:object="${style}" class="form-vertical  js-form-loading" th:action="@{/style/new}">
 				<brewer:message/>
 				
 				<div class="row">					
