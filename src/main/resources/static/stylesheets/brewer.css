@@ -132,6 +132,12 @@
 	text-align: right;
 }
 
+/* Colunas - Pesquisa de usuários */
+.table-user-col-select {
+	width: 30px;
+	text-align: center;
+}
+
 /*
 ##############################
 # COMPONENTS CUSTOMIZATION

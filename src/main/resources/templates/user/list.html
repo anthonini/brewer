@@ -3,6 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:brewer="http://brewer.anthonini.com"
+	xmlns:data="http://www.thymeleaf.org/extras/data"
 	layout:decorate="~{layout/layout-default}">
 	
 <head>
@@ -57,11 +58,27 @@
 			
 			<button type="submit" class="btn  btn-primary">Pesquisar</button>
 		</form>
+		
+		<div class="aw-datatable-toolbar">
+			<button class="btn btn-default btn-xs js-status-btn disabled" data:status="ACTIVATE" data:url="@{/user/status}">
+				<span>Ativar</span>
+			</button>
+			
+			<button class="btn btn-default btn-xs js-status-btn disabled" data:status="DEACTIVATE"  data:url="@{/user/status}">
+				<span>Desativar</span>
+			</button>
+		</div>
 
 		<div class="table-responsive  bw-tabela-simples">
 			<table class="table  table-hover">
 				<thead>
 					<tr>
+						<th class="table-user-col-select">
+	            			<div class="checkbox  aw-checkbox-no-margin">
+	            				<input type="checkbox" class="js-select-all"/>
+	            				<label></label>
+	            			</div>
+	            		</th>
 						<th class="table-user-col-name">Nome</th>
 						<th class="table-user-col-email">E-mail</th>
 						<th class="table-user-col-group">Grupo</th>
@@ -72,12 +89,20 @@
 				
 				<tbody>
 					<tr th:each="user : ${page.content}">
+						<td>
+							<div class="checkbox  aw-checkbox-no-margin" th:if="${user.id != #authentication.principal.user.id}">
+	            				<input type="checkbox" class="js-selecao" data:id="${user.id}">
+	            				<label></label>
+	            			</div>
+						</td>
 						<td th:text="${user.name}">Nome</td>
 						<td th:text="${user.email}">E-mail</td>
 						<td>
 							<span th:each="group : ${user.groups}" th:text="|${group.name}${groupStat.last ? '' : ', '} |"></span>
 						</td>
-						<td th:text="${user.status}">Status</td>
+						<td>
+							<span class="label" th:text="${user.status}" th:classappend="${user.active ? 'label-success' : 'label-danger'}"></span>
+						</td>
 						<td class="text-center">
 							<a class="btn  btn-link  btn-xs" title="Editar"> 
 								<i class="glyphicon glyphicon-pencil"></i>
@@ -88,7 +113,7 @@
 						</td>
 					</tr>
 					<tr th:if="${page.empty}">
-						<td colspan="4"><i>Nenhum usuário encontrado.</i></td>
+						<td colspan="6"><i>Nenhum usuário encontrado.</i></td>
 					</tr>
 				</tbody>
 			</table>
@@ -96,7 +121,11 @@
 		
 		<brewer:pagination page="${page}" />
 	</div>
-
 </section>
+
+<th:block layout:fragment="javascript-extra">
+	<script th:src="@{/javascripts/multiselection.js}"></script>
+</th:block>
+	
 </body>
 </html>

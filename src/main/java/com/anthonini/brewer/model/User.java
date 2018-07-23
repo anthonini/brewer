@@ -12,17 +12,21 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.anthonini.brewer.validation.ConfirmationAttribute;
 
 @ConfirmationAttribute(attribute = "password", confirmationAttribute = "passwordConfirmation", message = "Confirmação da senha não confere")
 @Entity
 @Table(name = "user")
+@DynamicUpdate
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -63,6 +67,11 @@ public class User implements Serializable {
 	
 	public String getStatus() {
 		return active ? "Ativo" : "Inativo";
+	}
+	
+	@PreUpdate
+	private void preUpdate() {
+		this.passwordConfirmation = password;
 	}
 	
 	public Long getId() {
