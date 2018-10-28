@@ -24,6 +24,7 @@ import org.hibernate.validator.group.GroupSequenceProvider;
 import com.anthonini.brewer.model.validation.ClientGroupSequenceProvider;
 import com.anthonini.brewer.model.validation.group.CnpjGroup;
 import com.anthonini.brewer.model.validation.group.CpfGroup;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -57,6 +58,7 @@ public class Client implements Serializable {
 	@Email(message = "e-mail inválido")
 	private String email;
 	
+	@JsonIgnore
 	@Embedded
 	private Address address;
 	

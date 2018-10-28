@@ -29,6 +29,13 @@ public class Address implements Serializable {
 	
 	@Transient
 	private State state;
+	
+	public String getCityNameStateInitials() {
+		if(city != null)
+			return city.getName() +"/" + city.getState().getInitials();
+		
+		return "";
+	}
 
 	public String getAddress() {
 		return address;

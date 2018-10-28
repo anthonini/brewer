@@ -1,5 +1,6 @@
 package com.anthonini.brewer.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,6 @@ import com.anthonini.brewer.repository.helper.client.ClientRepositoryQueries;
 public interface ClientRepository extends JpaRepository<Client, Long>, ClientRepositoryQueries {
 
 	public Optional<Client> findByCpfCnpj(String cpfCnpj);
+
+	public List<Client> findByNameStartingWithIgnoreCase(String name);
 }

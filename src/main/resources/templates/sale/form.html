@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout-default}"
+	xmlns:brewer="http://brewer.anthonini.com">
+
+<head>
+	<title>Cadastro de venda</title>
+	<link rel="stylesheet" th:href="@{/stylesheets/vendors/easy-autocomplete.min.css}"/>
+	<link rel="stylesheet" th:href="@{/stylesheets/vendors/easy-autocomplete.themes.min.css}"/>
+</head>
+
+<section layout:fragment="content">
+
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-10">
+					<h1>Cadastro de venda</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container-fluid">
+		<form method="POST" th:action="@{/sale/new}">
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="aw-box">
+						<div class="aw-box__icon">
+							<i class="fa  fa-usd  fa-3x"></i>
+						</div>
+						<div class="aw-box__value">R$0,00</div>
+						<div class="aw-box__title">Total</div>
+					</div>
+				</div>
+				
+				<div class="col-sm-4">
+					<div class="aw-box">
+						<div class="aw-box__icon">
+							<i class="fa  fa-tag  fa-3x"></i>
+						</div>
+						<div class="aw-box__value">Orçamento</div>
+						<div class="aw-box__title">Status</div>
+					</div>
+				</div>
+				
+				<div class="col-sm-4">
+					<div class="aw-box">
+						<div class="aw-box__icon">
+							<i class="fa  fa-calendar  fa-3x"></i>
+						</div>
+						<div class="aw-box__value">
+							<span class="js-tooltip">Hoje</span>
+						</div>
+						<div class="aw-box__title">Criação</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="form-group  col-sm-4  bw-required">
+					<label class="control-label" for="clientName">Cliente</label>
+					<div class="input-group">
+					<input type="hidden" id="clientId"/>
+				      <input id="clientName" type="text" readonly="readonly" class="form-control" placeholder="Clique na lupa para pesquisar o cliente"/>
+				      <span class="input-group-btn">
+				        <button class="btn  btn-default  js-tooltip" type="button" title="Pesquisa avançada"
+				        		data-toggle="modal" data-target="#fastClientSearch" >
+				        	<i class="glyphicon  glyphicon-search"></i>
+				        </button>
+				      </span>
+				    </div>
+				</div>
+				
+				<div class="form-group  col-sm-4 bw-required">
+					<label class="control-label" for="shippingValue">Valor do frete</label>
+					<div class="input-group">
+	      				<div class="input-group-addon">R$</div> 
+						<input type="text" maxlength="14" class="form-control  js-decimal" id="shippingValue"/>
+					</div>
+				</div>
+				
+				<div class="form-group  col-sm-4">
+					<label class="control-label" for="discountValue">Valor do desconto</label>
+					<div class="input-group">
+	      				<div class="input-group-addon">R$</div> 
+						<input type="text" maxlength="14" class="form-control  js-decimal" id="discountValue"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="form-group  col-lg-12">
+					<ul class="nav nav-tabs  js-abas-venda">
+					  <li role="presentation" class="active"><a href="#beers">Cervejas</a></li>
+					  <li role="presentation"><a href="#delivery">Entrega</a></li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="tab-content">
+				<div class="tab-pane active" id="beers">
+
+					<div class="row">
+						<div class="form-group  col-lg-12">
+							<input type="text" class="form-control js-beer-sku-or-name-input" id="beer" 
+								placeholder="Pesquise e adicione a cerveja pelo SKU ou nome" autofocus="autofocus" />
+						</div>
+					</div>
+					
+					<div class="bw-beers-table">
+						<div class="bw-item-table">
+							<div class="bw-item-table__column  bw-item-table__column--photo">
+								<img th:src="@{/photos/thumbnail.beer-mock.png}" class="img-responsive"/>
+							</div>
+							
+							<div class="bw-item-table__column  bw-item-table__column--details">
+								<span class="bw-beer-table-name">Negra Modelo Long Neck 355ml</span>
+								<span class="label label-default">AA1112</span>
+								<span class="bw-beer-table-origin">Importada</span>
+							</div>
+							
+							<div class="bw-item-table__column  bw-item-table__column--values">
+								<div class="bw-beer-table-small-value">
+									<input type="text" maxlength="3" class="bw-beer-table-amount-field" value="1"/>
+									<span>x R$8,90</span>
+								</div>
+								<div class="bw-beer-table-big-value">R$8,90</div>
+							</div>
+						</div>
+						
+						<!-- <div class="bw-beers-table__empty">
+							<i class="glyphicon  glyphicon-shopping-cart"></i> 
+							<span>Você ainda não adicionou nenhuma cerveja.</span>
+						</div> -->
+					</div>
+				</div>
+				
+				<div class="tab-pane" id="delivery">
+					<div class="row">
+						<div class="form-group  col-sm-3">
+							<label class="control-label" for="deliveryDate">Data da entrega</label>
+							<input type="text" class="form-control" id="deliveryDate"/>
+						</div>
+						
+						<div class="form-group  col-sm-3">
+							<label class="control-label" for="deliveryTime">Horário de entrega</label>
+							<input type="text" class="form-control" id="deliveryTime"/>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="form-group  col-sm-12">
+							<textarea class="form-control" id="deliveryDateObservation" rows="5" 
+								placeholder="Alguma observação para o entregador desse pedido?"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row" style="clear: both">
+				<div class="col-lg-12">
+					<div class="btn-group">
+					  <button type="submit" class="btn  btn-primary">Salvar</button>
+					  <button type="button" class="btn  btn-primary  dropdown-toggle" data-toggle="dropdown">
+					    <span class="caret"></span>
+					  </button>
+					  
+					  <ul class="dropdown-menu">
+					    <li><a href="#">Salvar e emitir</a></li>
+					    <li><a href="#">Salvar e enviar por e-mail</a></li>
+					  </ul>
+					</div>
+				
+					<button class="btn  btn-danger">Cancelar</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<th:block th:replace="~{client/fastClientSearch :: fastClientSearch}"></th:block>
+	<th:block th:replace="hbs/BeerAutocompleteTemplate"></th:block>
+</section>
+
+<th:block layout:fragment="javascript-extra">
+	<script th:src="@{/javascripts/vendors/jquery.easy-autocomplete.min.js}"></script>
+	<script th:src="@{/javascripts/vendors/handlebars.min.js}"></script>
+	<script th:src="@{/javascripts/client.fast-search.js}"></script>
+	<script th:src="@{/javascripts/sale.autocomplete-items.js}"></script>
+	<script>
+	$(function() {
+		$('.js-abas-venda a').click(function (e) {
+			e.preventDefault();
+			$(this).tab('show');
+		});
+	});
+	</script>
+</th:block>
+
+</html>

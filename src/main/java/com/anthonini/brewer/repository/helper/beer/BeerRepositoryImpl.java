@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
+import com.anthonini.brewer.dto.BeerDTO;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.repository.filter.BeerFilter;
 import com.anthonini.brewer.repository.pagination.PaginationUtil;
@@ -92,5 +93,15 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 	private boolean hasStyle(BeerFilter filter) {
 		return filter.getStyle() != null && filter.getStyle().getId()!= null;
 	}
-
+	
+	@Override
+	public List<BeerDTO> findBySkuOrName(String skuOrName) {
+		String jpql = "select new com.anthonini.brewer.dto.BeerDTO(id, sku, name, origin, value, photo) " +
+					  "from Beer "+
+					  "where lower(sku) like lower(:skuOrName) or lower(name) like lower(:skuOrName)";
+		
+		return manager.createQuery(jpql, BeerDTO.class)
+					  .setParameter("skuOrName", skuOrName + "%")
+					  .getResultList();		
+	}
 }
