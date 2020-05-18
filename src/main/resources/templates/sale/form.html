@@ -111,31 +111,11 @@
 						</div>
 					</div>
 					
-					<div class="bw-beers-table">
-						<div class="bw-item-table">
-							<div class="bw-item-table__column  bw-item-table__column--photo">
-								<img th:src="@{/photos/thumbnail.beer-mock.png}" class="img-responsive"/>
-							</div>
-							
-							<div class="bw-item-table__column  bw-item-table__column--details">
-								<span class="bw-beer-table-name">Negra Modelo Long Neck 355ml</span>
-								<span class="label label-default">AA1112</span>
-								<span class="bw-beer-table-origin">Importada</span>
-							</div>
-							
-							<div class="bw-item-table__column  bw-item-table__column--values">
-								<div class="bw-beer-table-small-value">
-									<input type="text" maxlength="3" class="bw-beer-table-amount-field" value="1"/>
-									<span>x R$8,90</span>
-								</div>
-								<div class="bw-beer-table-big-value">R$8,90</div>
-							</div>
-						</div>
-						
-						<!-- <div class="bw-beers-table__empty">
+					<div class="bw-beers-table js-beer-table-container">
+						<div class="bw-beers-table__empty">
 							<i class="glyphicon  glyphicon-shopping-cart"></i> 
 							<span>Você ainda não adicionou nenhuma cerveja.</span>
-						</div> -->
+						</div>
 					</div>
 				</div>
 				
@@ -189,6 +169,7 @@
 	<script th:src="@{/javascripts/vendors/handlebars.min.js}"></script>
 	<script th:src="@{/javascripts/client.fast-search.js}"></script>
 	<script th:src="@{/javascripts/sale.autocomplete-items.js}"></script>
+	<script th:src="@{/javascripts/sale.items-table.js}"></script>
 	<script>
 	$(function() {
 		$('.js-abas-venda a').click(function (e) {

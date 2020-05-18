@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:data="http://www.thymeleaf.com/extras/data">
+	
+	<div class="bw-item-table" th:each="item : ${items}">
+		<div class="bw-item-table__column  bw-item-table__column--photo">
+			<img th:src="@{/photos/thumbnail.{photo}(photo=${item.beer.photoOrMock})}" class="img-responsive"/>
+		</div>
+		
+		<div class="bw-item-table__column  bw-item-table__column--details">
+			<span class="bw-beer-table-name" th:text="${item.beer.name}">Negra Modelo Long Neck 355ml</span>
+			<span class="label label-default" th:text="${item.beer.sku}">AA1112</span>
+			<span class="bw-beer-table-origin" th:text="${item.beer.origin.description}">Importada</span>
+		</div>
+		
+		<div class="bw-item-table__column  bw-item-table__column--values">
+			<div class="bw-beer-table-small-value">
+				<input type="text" maxlength="3" class="bw-beer-table-quantity-field js-beer-table-quantity" 
+					th:value="${item.quantity}" data:beer-id="${item.beer.id}"/>
+				<span>x R$[[${{item.unityValue}}]]</span>
+			</div>
+			<div class="bw-beer-table-big-value">R$[[${{item.totalValue}}]]</div>
+		</div>
+	</div>
+</html>

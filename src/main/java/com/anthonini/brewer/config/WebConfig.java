@@ -40,6 +40,7 @@ import com.anthonini.brewer.controller.converter.CityConverter;
 import com.anthonini.brewer.controller.converter.StateConverter;
 import com.anthonini.brewer.controller.converter.StyleConverter;
 import com.anthonini.brewer.controller.converter.UserGroupConverter;
+import com.anthonini.brewer.session.SaleItemsTable;
 import com.anthonini.brewer.thymeleaf.BrewerDialect;
 import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDialect;
 import com.google.common.cache.CacheBuilder;
@@ -52,7 +53,7 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
  *
  **/
 @Configuration
-@ComponentScan(basePackageClasses = { BeerController.class })
+@ComponentScan(basePackageClasses = { BeerController.class, SaleItemsTable.class })
 @EnableWebMvc
 @EnableSpringDataWebSupport
 @EnableCaching

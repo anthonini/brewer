@@ -10,10 +10,10 @@ public class SaleItem {
 	
 	private BigDecimal unityValue;
 	
-	private Integer amount;
+	private Integer quantity;
 	
 	public BigDecimal getTotalValue() {
-		return unityValue.multiply(new BigDecimal(amount));
+		return unityValue.multiply(new BigDecimal(quantity));
 	}
 
 	public Long getId() {
@@ -40,12 +40,12 @@ public class SaleItem {
 		this.unityValue = unityValue;
 	}
 
-	public Integer getAmount() {
-		return amount;
+	public Integer getQuantity() {
+		return quantity;
 	}
 
-	public void setAmount(Integer amount) {
-		this.amount = amount;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 
 	@Override
