@@ -25,6 +25,7 @@ Brewer.ItemsTable = (function() {
 	function onServerItemUpdated(html) {
 		this.beerTableContainer.html(html);
 		$('.js-beer-table-quantity').on('change', onItemQuantityChanged.bind(this));
+		$('.js-item-table').on('dblclick', onDoubleClick);
 	}
 	
 	function onItemQuantityChanged(event) {
@@ -41,6 +42,10 @@ Brewer.ItemsTable = (function() {
 		});
 		
 		response.done(onServerItemUpdated.bind(this));
+	}
+	
+	function onDoubleClick(evento) {
+		$(this).toggleClass('soliciting-exclusion');
 	}
 	
 	return ItemsTable;

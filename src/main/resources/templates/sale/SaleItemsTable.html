@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:data="http://www.thymeleaf.com/extras/data">
 	
-	<div class="bw-item-table" th:each="item : ${items}">
+	<div class="bw-item-table js-item-table" th:each="item : ${items}">
 		<div class="bw-item-table__column  bw-item-table__column--photo">
 			<img th:src="@{/photos/thumbnail.{photo}(photo=${item.beer.photoOrMock})}" class="img-responsive"/>
 		</div>
@@ -21,6 +21,11 @@
 				<span>x R$[[${{item.unityValue}}]]</span>
 			</div>
 			<div class="bw-beer-table-big-value">R$[[${{item.totalValue}}]]</div>
+		</div>
+		
+		<div class="bw-item-table__exclusion-panel">
+			<span class="bw-item-table__exclusion-title">Excluir este item da venda?</span>
+			<button type="button" class="btn  btn-danger">Sim, excluir!</button>
 		</div>
 	</div>
 </html>
