@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -51,7 +52,7 @@ public class Sale implements Serializable {
 	@NotNull(message = "Valor total é obrigatório")
 	@DecimalMin(value = "0.0", message = "O valor total não pode ser negativo")
 	@Column(name = "total_value")
-	private BigDecimal totalValue;
+	private BigDecimal totalValue = BigDecimal.ZERO;
 	
 	@Column(name = "status")
 	@Enumerated(EnumType.STRING)
@@ -89,6 +90,22 @@ public class Sale implements Serializable {
 	public void addItems(List<SaleItem> items) {
 		this.items = items;
 		this.items.forEach(i -> i.setSale(this));
+	}
+	
+	public void calculateTotalValue() {
+		BigDecimal itemsTotalValue = getItems().stream()
+		.map(SaleItem::getTotalValue)
+		.reduce(BigDecimal::add)
+		.orElse(BigDecimal.ZERO);
+		
+		this.totalValue = calculateTotalValue(itemsTotalValue, getShippingValue(), getDiscountValue());
+	}
+	
+	private BigDecimal calculateTotalValue(BigDecimal ItemsTotalValue, BigDecimal shippingValue, BigDecimal discountValue) {
+		BigDecimal valorTotal = ItemsTotalValue
+				.add(Optional.ofNullable(shippingValue).orElse(BigDecimal.ZERO))
+				.subtract(Optional.ofNullable(discountValue).orElse(BigDecimal.ZERO));
+		return valorTotal;
 	}
 
 	public Long getId() {

@@ -5,8 +5,12 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.anthonini.brewer.controller.validator.SaleValidator;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.model.Sale;
 import com.anthonini.brewer.repository.BeerRepository;
@@ -33,18 +38,42 @@ public class SaleController {
 	
 	@Autowired
 	private SaleService saleService;
+	
+	@Autowired
+	private SaleValidator saleValidator;
+	
+	@InitBinder
+	public void iniializateValidator(WebDataBinder binder) {
+		binder.setValidator(saleValidator);
+	}
 
 	@GetMapping("/new")
 	public ModelAndView form(Sale sale) {
 		ModelAndView mv = new ModelAndView("sale/form");
-		sale.setUuid(UUID.randomUUID().toString());
+		
+		if(StringUtils.isEmpty(sale.getUuid())) {
+			sale.setUuid(UUID.randomUUID().toString());
+		}
+		
+		mv.addObject("items", sale.getItems());
+		mv.addObject("shippingValue", sale.getShippingValue());
+		mv.addObject("discountValue", sale.getDiscountValue());
+		mv.addObject("totalValue", saleItemsTableSession.getTotalValue(sale.getUuid()));
+		
 		return mv;
 	}
 	
 	@PostMapping("/new")
-	public ModelAndView save(Sale sale, RedirectAttributes redirectAttributes, @AuthenticationPrincipal SystemUser systemUser) {
-		sale.setUser(systemUser.getUser());
+	public ModelAndView save(Sale sale, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal SystemUser systemUser) {
 		sale.addItems(saleItemsTableSession.getItems(sale.getUuid()));
+		sale.calculateTotalValue();
+		
+		saleValidator.validate(sale, bindingResult);
+		if(bindingResult.hasErrors()) {
+			return form(sale);
+		}
+		
+		sale.setUser(systemUser.getUser());
 		
 		saleService.save(sale);
 		redirectAttributes.addFlashAttribute("successMessage", "Venda salva com sucesso!");

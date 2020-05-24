@@ -8,8 +8,15 @@ Brewer.ItemsTable = (function() {
 		this.on = this.emitter.on.bind(this.emitter);
 	}
 	
+	ItemsTable.prototype.totalValue = function() {
+		return this.beerTableContainer.data('value');
+	}
+	
 	ItemsTable.prototype.start = function() {
 		this.autocomplete.on('sale.selected-item', onSelectedItem.bind(this));
+		
+		bindQuantity.call(this);
+		bindItemTable.call(this);
 	}
 	
 	function onSelectedItem(event, item) {
@@ -28,14 +35,9 @@ Brewer.ItemsTable = (function() {
 	function onServerItemUpdated(html) {
 		this.beerTableContainer.html(html);
 		
-		var itemQuantityInput = $('.js-beer-table-quantity');
-		itemQuantityInput.on('change', onItemQuantityChanged.bind(this));
-		itemQuantityInput.maskMoney({precision: 0, thousands: ''});
+		bindQuantity.call(this);
 		
-		var itemTable = $('.js-item-table');
-		itemTable.on('dblclick', onDoubleClick);
-		$('.js-item-exclusion-btn').on('click', onBtnExlcusionClicked.bind(this));
-		
+		var itemTable = bindItemTable.call(this);		
 		this.emitter.trigger('items-table-updated', itemTable.data('total-value'));
 	}
 	
@@ -75,7 +77,21 @@ Brewer.ItemsTable = (function() {
 		});
 		
 		response.done(onServerItemUpdated.bind(this));
-	} 
+	}
+	
+	function bindQuantity() {
+		var itemQuantityInput = $('.js-beer-table-quantity');
+		itemQuantityInput.on('change', onItemQuantityChanged.bind(this));
+		itemQuantityInput.maskMoney({precision: 0, thousands: ''});
+	}
+	
+	function bindItemTable() {
+		var itemTable = $('.js-item-table');
+		itemTable.on('dblclick', onDoubleClick);
+		$('.js-item-exclusion-btn').on('click', onBtnExlcusionClicked.bind(this));
+		
+		return itemTable;
+	}
 	
 	return ItemsTable;
 }());
