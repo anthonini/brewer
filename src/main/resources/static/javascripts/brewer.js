@@ -87,9 +87,14 @@ Brewer.Security = (function() {
 	return Security;
 }());
 
-Brewer.formatCurrency = function(value) {
-	numeral.locale('pt-br');
+numeral.language('pt-br');
+
+Brewer.formatCurrency = function(value) {	
 	return numeral(value).format('0,0.00');
+}
+
+Brewer.unFormatCurrency = function(formattedValue) {
+	return numeral().unformat(formattedValue);
 }
 
 $(function(){	

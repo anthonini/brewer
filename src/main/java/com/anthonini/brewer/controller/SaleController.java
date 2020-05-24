@@ -62,6 +62,7 @@ public class SaleController {
 	private ModelAndView mvSaleItemsTable(String uuid) {
 		ModelAndView mv = new ModelAndView("sale/SaleItemsTable");
 		mv.addObject("items", saleItemsTableSession.getItems(uuid));
+		mv.addObject("totalValue", saleItemsTableSession.getTotalValue(uuid));
 		
 		return mv;
 	}

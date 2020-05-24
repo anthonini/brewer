@@ -34,6 +34,10 @@ public class SaleItemsTableSession {
 		return getSaleItemsTableByUuid(uuid).getItems();
 	}
 	
+	public Object getTotalValue(String uuid) {
+		return getSaleItemsTableByUuid(uuid).getTotalValue();
+	}
+	
 	private SaleItemsTable getSaleItemsTableByUuid(String uuid) {
 		return tables.stream()
 		.filter(t -> t.getUuid().equals(uuid))

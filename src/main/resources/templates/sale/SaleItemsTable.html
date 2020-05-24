@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:data="http://www.thymeleaf.com/extras/data">
 	
-	<div class="bw-item-table js-item-table" th:each="item : ${items}">
+	<div class="bw-item-table js-item-table" th:each="item : ${items}" data:total-value="${totalValue}">
 		<div class="bw-item-table__column  bw-item-table__column--photo">
 			<img th:src="@{/photos/thumbnail.{photo}(photo=${item.beer.photoOrMock})}" class="img-responsive"/>
 		</div>
