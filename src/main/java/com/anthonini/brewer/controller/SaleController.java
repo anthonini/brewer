@@ -63,12 +63,9 @@ public class SaleController {
 		return mv;
 	}
 	
-	@PostMapping("/new")
+	@PostMapping(value = "/new", params = "save")
 	public ModelAndView save(Sale sale, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal SystemUser systemUser) {
-		sale.addItems(saleItemsTableSession.getItems(sale.getUuid()));
-		sale.calculateTotalValue();
-		
-		saleValidator.validate(sale, bindingResult);
+		validateSale(sale, bindingResult);
 		if(bindingResult.hasErrors()) {
 			return form(sale);
 		}
@@ -77,6 +74,34 @@ public class SaleController {
 		
 		saleService.save(sale);
 		redirectAttributes.addFlashAttribute("successMessage", "Venda salva com sucesso!");
+		return new ModelAndView("redirect:new");
+	}
+	
+	@PostMapping(value = "/new", params = "emmit")
+	public ModelAndView emmit(Sale sale, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal SystemUser systemUser) {
+		validateSale(sale, bindingResult);
+		if(bindingResult.hasErrors()) {
+			return form(sale);
+		}
+		
+		sale.setUser(systemUser.getUser());
+		
+		saleService.emmit(sale);
+		redirectAttributes.addFlashAttribute("successMessage", "Venda emitida com sucesso!");
+		return new ModelAndView("redirect:new");
+	}
+	
+	@PostMapping(value = "/new", params = "sendEmail")
+	public ModelAndView sendEmail(Sale sale, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal SystemUser systemUser) {
+		validateSale(sale, bindingResult);
+		if(bindingResult.hasErrors()) {
+			return form(sale);
+		}
+		
+		sale.setUser(systemUser.getUser());
+		
+		saleService.save(sale);
+		redirectAttributes.addFlashAttribute("successMessage", "Venda salva e email enviado com sucesso!");
 		return new ModelAndView("redirect:new");
 	}
 	
@@ -112,5 +137,12 @@ public class SaleController {
 		mv.addObject("totalValue", saleItemsTableSession.getTotalValue(uuid));
 		
 		return mv;
+	}
+	
+	private void validateSale(Sale sale, BindingResult bindingResult) {
+		sale.addItems(saleItemsTableSession.getItems(sale.getUuid()));
+		sale.calculateTotalValue();
+		
+		saleValidator.validate(sale, bindingResult);
 	}
 }

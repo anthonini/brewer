@@ -22,8 +22,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "sale")
@@ -39,18 +37,12 @@ public class Sale implements Serializable {
 	@Column(name = "creation_date")
 	private LocalDateTime creationDate;
 	
-	@NotNull(message = "Frete é obrigatório")
-	@DecimalMin(value = "0.0", message = "O valor do frete não pode ser negativo")
 	@Column(name = "shipping_value")
 	private BigDecimal shippingValue;
 	
-	@NotNull(message = "Frete é obrigatório")
-	@DecimalMin(value = "0.0", message = "O valor do desconto não pode ser negativo")
 	@Column(name = "discount_value")
 	private BigDecimal discountValue;
 	
-	@NotNull(message = "Valor total é obrigatório")
-	@DecimalMin(value = "0.0", message = "O valor total não pode ser negativo")
 	@Column(name = "total_value")
 	private BigDecimal totalValue = BigDecimal.ZERO;
 	

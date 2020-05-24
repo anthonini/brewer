@@ -25,7 +25,7 @@
 	</div>
 	
 	<div class="container-fluid">
-		<form method="POST" th:action="@{/sale/new}" th:object="${sale}">
+		<form method="POST" th:action="@{/sale/new}" th:object="${sale}" class="js-main-form">
 			<brewer:message/>
 			<input type="hidden" id="uuid" th:field="*{uuid}"/>
 			
@@ -144,14 +144,14 @@
 			<div class="row" style="clear: both">
 				<div class="col-lg-12">
 					<div class="btn-group">
-					  <button type="submit" class="btn  btn-primary">Salvar</button>
+					  <button type="submit" class="btn  btn-primary js-submit-btn" data:action="save">Salvar</button>
 					  <button type="button" class="btn  btn-primary  dropdown-toggle" data-toggle="dropdown">
 					    <span class="caret"></span>
 					  </button>
 					  
 					  <ul class="dropdown-menu">
-					    <li><a href="#">Salvar e emitir</a></li>
-					    <li><a href="#">Salvar e enviar por e-mail</a></li>
+					    <li><a href="#" class="js-submit-btn" data:action="emmit">Salvar e emitir</a></li>
+					    <li><a href="#" class="js-submit-btn" data:action="sendEmail">Salvar e enviar por e-mail</a></li>
 					  </ul>
 					</div>
 				
@@ -171,6 +171,7 @@
 	<script th:src="@{/javascripts/sale.autocomplete-items.js}"></script>
 	<script th:src="@{/javascripts/sale.items-table.js}"></script>
 	<script th:src="@{/javascripts/sale.js}"></script>
+	<script th:src="@{/javascripts/sale.submit-buttons.js}"></script>
 	<script>
 	$(function() {
 		$('.js-abas-venda a').click(function (e) {
