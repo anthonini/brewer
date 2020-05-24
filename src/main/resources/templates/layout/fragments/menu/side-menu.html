@@ -39,10 +39,10 @@
           			</a>
       
           			<ul class="aw-menu__list  aw-menu__list--sublist">
-			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/style}">
+			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/style.*}">
 			            	<a th:href="@{/style}">Estilos</a>
 			            </li>
-			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/beer}">
+			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/beer.*}">
 			            	<a th:href="@{/beer}">Cervejas</a>
 			            </li>
           			</ul>
@@ -55,13 +55,13 @@
           			</a>
 
           			<ul class="aw-menu__list  aw-menu__list--sublist">
-			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/city}">
+			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/city.*}">
 			            	<a th:href="@{/city}">Cidades</a>
 			            </li>
-			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/client}">
+			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/client.*}">
 			            	<a th:href="@{/client}">Clientes</a>
 			            </li>
-			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/user}" sec:authorize="hasRole('ROLE_REGISTER_USER')">
+			            <li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/user.*}" sec:authorize="hasRole('ROLE_REGISTER_USER')">
 			            	<a th:href="@{/user}">Usuários</a>
 			            </li>
           			</ul>
