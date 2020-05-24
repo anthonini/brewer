@@ -25,8 +25,8 @@ import com.anthonini.brewer.controller.page.PageWrapper;
 import com.anthonini.brewer.model.City;
 import com.anthonini.brewer.repository.CityRepository;
 import com.anthonini.brewer.repository.StateRepository;
-import com.anthonini.brewer.repository.city.CityService;
 import com.anthonini.brewer.repository.filter.CityFilter;
+import com.anthonini.brewer.service.CityService;
 import com.anthonini.brewer.service.exception.CityAlreadyRegisteredException;
 
 @Controller

@@ -1,4 +1,4 @@
-package com.anthonini.brewer.repository.city;
+package com.anthonini.brewer.service;
 
 import java.util.Optional;
 

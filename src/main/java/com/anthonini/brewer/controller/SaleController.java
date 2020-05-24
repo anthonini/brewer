@@ -2,7 +2,11 @@ package com.anthonini.brewer.controller;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -18,10 +22,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.anthonini.brewer.controller.page.PageWrapper;
 import com.anthonini.brewer.controller.validator.SaleValidator;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.model.Sale;
+import com.anthonini.brewer.model.SaleStatus;
 import com.anthonini.brewer.repository.BeerRepository;
+import com.anthonini.brewer.repository.SaleRepository;
+import com.anthonini.brewer.repository.filter.SaleFilter;
 import com.anthonini.brewer.security.SystemUser;
 import com.anthonini.brewer.service.SaleService;
 import com.anthonini.brewer.session.SaleItemsTableSession;
@@ -34,6 +42,9 @@ public class SaleController {
 	private BeerRepository beerRepository;
 	
 	@Autowired
+	private SaleRepository saleRepository;
+	
+	@Autowired
 	private SaleItemsTableSession saleItemsTableSession;
 	
 	@Autowired
@@ -42,7 +53,7 @@ public class SaleController {
 	@Autowired
 	private SaleValidator saleValidator;
 	
-	@InitBinder
+	@InitBinder("sale")
 	public void iniializateValidator(WebDataBinder binder) {
 		binder.setValidator(saleValidator);
 	}
@@ -129,6 +140,18 @@ public class SaleController {
 		saleItemsTableSession.deleteItem(uuid, beer);
 		
 		return mvSaleItemsTable(uuid);
+	}
+	
+	@GetMapping
+	public ModelAndView list(SaleFilter saleFilter, @PageableDefault(size = 3) Pageable pageable,
+			HttpServletRequest httpServletRequest) {
+		ModelAndView mv = new ModelAndView("sale/list");
+		mv.addObject("allStatus", SaleStatus.values());
+		
+		PageWrapper<Sale> pageWrapper = new PageWrapper<>(saleRepository.filter(saleFilter, pageable), httpServletRequest);
+		mv.addObject("page", pageWrapper);
+		
+		return mv;
 	}
 
 	private ModelAndView mvSaleItemsTable(String uuid) {
