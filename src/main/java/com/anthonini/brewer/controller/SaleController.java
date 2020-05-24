@@ -1,5 +1,7 @@
 package com.anthonini.brewer.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.repository.BeerRepository;
-import com.anthonini.brewer.session.SaleItemsTable;
+import com.anthonini.brewer.session.SaleItemsTableSession;
 
 @Controller
 @RequestMapping("/sale")
@@ -22,42 +24,44 @@ public class SaleController {
 	private BeerRepository beerRepository;
 	
 	@Autowired
-	private SaleItemsTable saleItemsTable;
+	private SaleItemsTableSession saleItemsTableSession;
 
 	@GetMapping("/new")
-	public String form() {
-		return "sale/form";
+	public ModelAndView form() {
+		ModelAndView mv = new ModelAndView("sale/form");
+		mv.addObject("uuid", UUID.randomUUID());
+		return mv;
 	}
 	
 	@PostMapping("/item")
-	public ModelAndView addItem(Long beerId) {
+	public ModelAndView addItem(Long beerId, String uuid) {
 		Beer beer = beerRepository.findOne(beerId);
-		saleItemsTable.addItem(beer, 1);
+		saleItemsTableSession.addItem(uuid, beer, 1);
 		
-		return mvSaleItemsTable();
+		return mvSaleItemsTable(uuid);
 	}
 	
 	@PutMapping("/item/{beerId}")
-	public ModelAndView changeItemQuantity(@PathVariable Long beerId, Integer quantity) {
+	public ModelAndView changeItemQuantity(@PathVariable Long beerId, Integer quantity, String uuid) {
 		Beer beer = new Beer();
 		beer.setId(beerId);
-		saleItemsTable.changeQuantity(beer, quantity);
+		saleItemsTableSession.changeQuantity(uuid, beer, quantity);
 		
-		return mvSaleItemsTable();
+		return mvSaleItemsTable(uuid);
 	}
 	
-	@DeleteMapping("/item/{beerId}")
-	public ModelAndView deleteItem(@PathVariable Long beerId) {
+	@DeleteMapping("/item/{uuid}/{beerId}")
+	public ModelAndView deleteItem(@PathVariable String uuid, @PathVariable Long beerId) {
 		Beer beer = new Beer();
 		beer.setId(beerId);
-		saleItemsTable.deleteItem(beer);
+		saleItemsTableSession.deleteItem(uuid, beer);
 		
-		return mvSaleItemsTable();
+		return mvSaleItemsTable(uuid);
 	}
 
-	private ModelAndView mvSaleItemsTable() {
+	private ModelAndView mvSaleItemsTable(String uuid) {
 		ModelAndView mv = new ModelAndView("sale/SaleItemsTable");
-		mv.addObject("items", saleItemsTable.getItems());
+		mv.addObject("items", saleItemsTableSession.getItems(uuid));
 		
 		return mv;
 	}

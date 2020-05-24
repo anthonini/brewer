@@ -1,6 +1,6 @@
-package com.anthonini.brewer.sale;
+package com.anthonini.brewer.session;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 
@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.anthonini.brewer.model.Beer;
-import com.anthonini.brewer.session.SaleItemsTable;
 
 public class SaleItemsTableTest {
 	
@@ -16,7 +15,7 @@ public class SaleItemsTableTest {
 	
 	@Before
 	public void setUp() {
-		saleItemsTable = new SaleItemsTable();
+		saleItemsTable = new SaleItemsTable("1");
 	}
 
 	@Test
