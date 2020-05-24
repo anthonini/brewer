@@ -25,7 +25,13 @@
 		
 		<div class="bw-item-table__exclusion-panel">
 			<span class="bw-item-table__exclusion-title">Excluir este item da venda?</span>
-			<button type="button" class="btn  btn-danger">Sim, excluir!</button>
+			<button type="button" class="btn  btn-danger js-item-exclusion-btn" data:beer-id="${item.beer.id}">Sim, excluir!</button>
+		</div>
+	</div>
+	<div class="bw-beers-table js-beer-table-container" th:if="${items.empty}">
+		<div class="bw-beers-table__empty">
+			<i class="glyphicon  glyphicon-shopping-cart"></i> 
+			<span>Você ainda não adicionou nenhuma cerveja.</span>
 		</div>
 	</div>
 </html>

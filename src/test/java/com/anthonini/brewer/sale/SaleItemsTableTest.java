@@ -77,4 +77,27 @@ public class SaleItemsTableTest {
 		assertEquals(1, saleItemsTable.total());
 		assertEquals(new BigDecimal("13.50"), saleItemsTable.getTotalValue());
 	}
+	
+	@Test
+	public void testItemExclusion() throws Exception {
+		Beer b1 = new Beer();
+		b1.setId(1L);
+		b1.setValue(new BigDecimal("8.50"));
+		
+		Beer b2 = new Beer();
+		b2.setId(2L);
+		b2.setValue(new BigDecimal("4.99"));
+		
+		Beer b3 = new Beer();
+		b3.setId(3L);
+		b3.setValue(new BigDecimal("5.50"));
+		
+		saleItemsTable.addItem(b1, 1);
+		saleItemsTable.addItem(b2, 2);
+		saleItemsTable.addItem(b3, 1);
+		
+		saleItemsTable.deleteItem(b2);
+		
+		assertEquals(new BigDecimal("14.00"), saleItemsTable.getTotalValue());
+	}
 }

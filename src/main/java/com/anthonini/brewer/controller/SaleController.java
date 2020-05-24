@@ -2,6 +2,7 @@ package com.anthonini.brewer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,10 +34,7 @@ public class SaleController {
 		Beer beer = beerRepository.findOne(beerId);
 		saleItemsTable.addItem(beer, 1);
 		
-		ModelAndView mv = new ModelAndView("sale/SaleItemsTable");
-		mv.addObject("items", saleItemsTable.getItems());
-		
-		return mv;
+		return mvSaleItemsTable();
 	}
 	
 	@PutMapping("/item/{beerId}")
@@ -45,6 +43,19 @@ public class SaleController {
 		beer.setId(beerId);
 		saleItemsTable.changeQuantity(beer, quantity);
 		
+		return mvSaleItemsTable();
+	}
+	
+	@DeleteMapping("/item/{beerId}")
+	public ModelAndView deleteItem(@PathVariable Long beerId) {
+		Beer beer = new Beer();
+		beer.setId(beerId);
+		saleItemsTable.deleteItem(beer);
+		
+		return mvSaleItemsTable();
+	}
+
+	private ModelAndView mvSaleItemsTable() {
 		ModelAndView mv = new ModelAndView("sale/SaleItemsTable");
 		mv.addObject("items", saleItemsTable.getItems());
 		
