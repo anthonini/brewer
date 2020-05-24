@@ -2,7 +2,9 @@ package com.anthonini.brewer.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +20,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
@@ -72,6 +73,24 @@ public class Sale implements Serializable {
 	@OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
 	private List<SaleItem> items = new ArrayList<>();
 	
+	@Transient
+	private String uuid;
+	
+	@Transient
+	private LocalDate deliveryDate;
+	
+	@Transient
+	private LocalTime deliveryTime;
+	
+	public boolean isNew() {
+		return id == null;
+	}
+	
+	public void addItems(List<SaleItem> items) {
+		this.items = items;
+		this.items.forEach(i -> i.setSale(this));
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -158,6 +177,30 @@ public class Sale implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public LocalDate getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(LocalDate deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
+
+	public LocalTime getDeliveryTime() {
+		return deliveryTime;
+	}
+
+	public void setDeliveryTime(LocalTime deliveryTime) {
+		this.deliveryTime = deliveryTime;
 	}
 
 	@Override

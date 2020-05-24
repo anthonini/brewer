@@ -1,12 +1,14 @@
 package com.anthonini.brewer.session;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
 import com.anthonini.brewer.model.Beer;
+import com.anthonini.brewer.model.SaleItem;
 
 @Component
 @SessionScope
@@ -30,7 +32,7 @@ public class SaleItemsTableSession {
 		table.deleteItem(beer);
 	}
 
-	public Object getItems(String uuid) {
+	public List<SaleItem> getItems(String uuid) {
 		return getSaleItemsTableByUuid(uuid).getItems();
 	}
 	
