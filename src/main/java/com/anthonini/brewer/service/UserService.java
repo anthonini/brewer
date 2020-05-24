@@ -37,4 +37,9 @@ public class UserService {
 		
 		userRepository.save(user);
 	}
+
+	@Transactional
+	public void updateStatus(Long[] ids, UserStatus userStatus) {
+		userStatus.executar(ids, userRepository);
+	}
 }

@@ -71,6 +71,27 @@ Brewer.MaskDate = (function() {
 	
 }());
 
+Brewer.Security = (function() {
+	
+	function Security() {
+		this.token = $('input[name=_csrf').val();
+		this.header = $('input[name=_csrf_header]').val();
+	}
+	
+	Security.prototype.enable = function() {
+		$(document).ajaxSend(function(event, jqxhr, settings){
+			jqxhr.setRequestHeader(this.header, this.token);
+		}.bind(this));
+	}
+	
+	return Security;
+}());
+
+Brewer.formatCurrency = function(value) {
+	numeral.locale('pt-br');
+	return numeral(value).format('0,0.00');
+}
+
 $(function(){	
 	var maskNumber = new Brewer.MaskMoney();
 	maskNumber.enable();
@@ -83,4 +104,7 @@ $(function(){
 	
 	var maskDate = new Brewer.MaskDate();
 	maskDate.enable();
+	
+	var security = new Brewer.Security();
+	security.enable();
 });

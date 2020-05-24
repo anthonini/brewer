@@ -28,6 +28,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -39,6 +40,7 @@ import com.anthonini.brewer.controller.converter.CityConverter;
 import com.anthonini.brewer.controller.converter.StateConverter;
 import com.anthonini.brewer.controller.converter.StyleConverter;
 import com.anthonini.brewer.controller.converter.UserGroupConverter;
+import com.anthonini.brewer.session.SaleItemsTable;
 import com.anthonini.brewer.thymeleaf.BrewerDialect;
 import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDialect;
 import com.google.common.cache.CacheBuilder;
@@ -51,7 +53,7 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
  *
  **/
 @Configuration
-@ComponentScan(basePackageClasses = { BeerController.class })
+@ComponentScan(basePackageClasses = { BeerController.class, SaleItemsTable.class })
 @EnableWebMvc
 @EnableSpringDataWebSupport
 @EnableCaching
@@ -76,6 +78,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		engine.addDialect(new LayoutDialect());
 		engine.addDialect(new BrewerDialect());
 		engine.addDialect(new DataAttributeDialect());
+		engine.addDialect(new SpringSecurityDialect());
 		
 		return engine;
 	}

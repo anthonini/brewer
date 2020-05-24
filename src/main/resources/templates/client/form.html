@@ -15,15 +15,25 @@
 	<section layout:fragment="content">	
 		<div class="page-header">
 			<div class="container-fluid">
-				<h1>
-					Cadastro de cliente
-				</h1>
+				<div class="row">
+					<div class="col-xs-10">
+						<h1>Cadastro de cliente</h1>
+					</div>
+				
+					<div class="col-xs-2">
+						<div class="aw-page-header-controls">
+							<a class="btn  btn-default" th:href="@{/client}">
+								<i class="glyphicon  glyphicon-search"></i> <span class="hidden-xs  hidden-sm">Pesquisa</span>
+							</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
 		<div class="container-fluid">
 
-			<form method="POST" th:object="${client}" class="form-vertical  js-form-loading">
+			<form method="POST" th:object="${client}" class="form-vertical  js-form-loading" th:action="@{/client/new}">
 				<brewer:message/>
 				
 				<div class="row">

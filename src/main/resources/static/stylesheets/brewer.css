@@ -104,7 +104,7 @@
 	width: 120px;
 }
 
-.table-beer-col-origem {
+.table-beer-col-origin {
 	width: 100px;
 }
 
@@ -132,6 +132,28 @@
 	text-align: right;
 }
 
+/* Colunas - Pesquisa de usuários */
+.table-user-col-select {
+	width: 30px;
+	text-align: center;
+}
+
+/* Tabela Cervejas página de Venda */
+.bw-beers-table {
+	margin-bottom: 15px;
+}
+
+.bw-beers-table__empty {
+	padding: 15px 15px;
+	
+	border: 1px dashed #ddd;
+	
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: 300;
+	color: #555;
+}
+
 /*
 ##############################
 # COMPONENTS CUSTOMIZATION
@@ -141,4 +163,138 @@
 .checkbox input[type="checkbox"]:checked + input + label::after {
     font-family: 'FontAwesome';
     content: "\f00c"; 
+}
+
+/* Easy Autocomplete */
+.easy-autocomplete input {
+	border-radius: 2px !important;
+}
+
+.easy-autocomplete-container ul li {
+	font-size: 1em !important;
+	padding: 0px 5px !important;
+}
+
+/* Tabela Item */
+.bw-item-table {
+	position: relative; /* Para que o painel de exclusão apareça dentro da linha */
+	
+	padding: 15px 0;
+	
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+.bw-item-table:after {
+	clear: both;
+	display: block;
+    content: "";
+}
+
+.bw-item-table ~ .bw-item-table {
+	border-top: 1px solid #ddd;
+}
+
+.bw-item-table__column {
+	padding: 0 10px;
+}
+
+.bw-item-table__column--photo {
+	float: left;
+	width: 60px;
+	
+	text-align: center;
+}
+
+.bw-item-table__column--values {
+	padding-right: 0px;
+}
+
+.bw-item-table__column--details, .bw-item-table__column--values {
+	margin-left: 60px;
+}
+
+.bw-beer-table-name {
+	font-weight: 500;
+	font-size: 1.1em;
+	display: block;
+}
+
+.bw-beer-table-origin {
+	color: #aaa;
+	display: block;
+	font-weight: 200;
+}
+
+.bw-beer-table-quantity-field {
+	width: 30px;
+	text-align: right;
+}
+
+.bw-beer-table-small-value {
+	font-weight: 300;
+	font-size: 1em;
+}
+
+.bw-beer-table-mid-value {
+	font-weight: 300;
+	font-size: 1.3em;
+}
+
+.bw-beer-table-big-value {
+	font-weight: 300;
+	font-size: 1.6em;
+}
+
+.bw-item-table__exclusion-panel {
+    position: absolute;
+    top: 0;
+    right: 100000px;
+	height: 100%;
+    width: 50%;
+    
+    text-align: center;
+    padding-top: 35px;
+    
+	background-color: #f0ad4e;
+	
+	opacity: 0;
+	transition: opacity 0.5s;
+}
+
+.soliciting-exclusion .bw-item-table__exclusion-panel {
+	right: 0;
+	opacity: 1;
+}
+
+.bw-item-table__exclusion-title {
+    display: block;
+    margin-bottom: 5px;
+    
+	color: #fff;
+    font-size: 1.3em;
+}
+
+@media (min-width: 768px) { /* screen-sm-min */
+	.bw-item-table__exclusion-panel {
+		width: 40%;
+		padding-top: 10px;
+	}
+	
+	.bw-item-table__column {
+		float: left;
+		margin-left: 0px;
+	}
+	
+	.bw-item-table__column--details {
+		width: calc(70% - 30px);
+	}
+	
+	.bw-item-table__column--values {
+		width: calc(30% - 30px);
+
+		text-align: right;
+	}
 }
