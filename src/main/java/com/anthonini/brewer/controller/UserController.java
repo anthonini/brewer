@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,17 +42,17 @@ public class UserController {
 	private UserRepository userRepository;
 
 	@GetMapping("/new")
-	public ModelAndView create(User user) {
+	public ModelAndView form(User user) {
 		ModelAndView mv = new ModelAndView("user/form");
 		mv.addObject("userGroups", userGroupRepository.findAll());
 		
 		return mv;
 	}
 	
-	@PostMapping("/new")
+	@PostMapping({"/new", "/{\\d+}"})
 	public ModelAndView save(@Valid User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
-			return create(user);
+			return form(user);
 		}
 		
 		try {
@@ -60,7 +61,7 @@ public class UserController {
 			return new ModelAndView("redirect:new");
 		}catch (UserEmailAlreadyRegisteredException e) {
 			bindingResult.rejectValue("email", e.getMessage(), e.getMessage());
-			return create(user);
+			return form(user);
 		}
 	}
 
@@ -80,5 +81,14 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	public void updateStatus(@RequestParam("ids[]") Long[] ids, @RequestParam("status") UserStatus userStatus) {
 		userService.updateStatus(ids, userStatus);
+	}
+	
+	@GetMapping("/{id}")
+	public ModelAndView update(@PathVariable Long id) {
+		User user = userRepository.findWithGroups(id);
+		ModelAndView mv = form(user);
+		mv.addObject(user);
+		
+		return mv;
 	}
 }

@@ -11,6 +11,8 @@ import com.anthonini.brewer.repository.helper.user.UserRepositoryQueries;
 public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryQueries {
 
 	public Optional<User> findByEmail(String email);
+	
+	public Optional<User> findByEmailOrId(String email, Long id);
 
 	public List<User> findByIdIn(Long[] ids);
 }

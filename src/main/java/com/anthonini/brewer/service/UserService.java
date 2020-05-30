@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.anthonini.brewer.model.User;
 import com.anthonini.brewer.repository.UserRepository;
@@ -23,16 +24,28 @@ public class UserService {
 	
 	@Transactional
 	public void save(User user) {
-		Optional<User> existingUserByEmail = userRepository.findByEmail(user.getEmail());
+		Optional<User> existingUserByEmail = userRepository.findByEmailOrId(user.getEmail(), user.getId());
 		
-		if(existingUserByEmail.isPresent()) {
+		if(existingUserByEmail.isPresent() && !existingUserByEmail.get().equals(user)) {
 			throw new UserEmailAlreadyRegisteredException("E-mail já cadastrado");
 		}
 		
-		if( user.isNew() ) {
-			String encryptedPassword = this.passwordEncoder.encode(user.getPassword());
-			user.setPassword(encryptedPassword);
-			user.setPasswordConfirmation(encryptedPassword);
+		if(user.isNew() && StringUtils.isEmpty(user.getPassword())) {
+			throw new UserPasswordRequiredException("Senha é obrigatória");
+		}
+		
+		if( user.isNew() || !StringUtils.isEmpty(user.getPassword())) {
+			user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+			user.setPasswordConfirmation(user.getPassword());
+		}
+		
+		if(!user.isNew()) {
+			if(StringUtils.isEmpty(user.getPassword())) {
+				user.setPassword(existingUserByEmail.get().getPassword());
+			}
+			if(user.getActive() == null) {
+				user.setActive(existingUserByEmail.get().getActive());
+			}
 		}
 		
 		userRepository.save(user);

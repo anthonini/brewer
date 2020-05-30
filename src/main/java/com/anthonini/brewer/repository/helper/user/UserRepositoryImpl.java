@@ -61,6 +61,20 @@ public class UserRepositoryImpl implements UserRepositoryQueries {
 		return new PageImpl<>(query.getResultList(), pageable, total(filter));
 	}
 	
+	@Override
+	public User findWithGroups(Long id) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<User> criteriaQuery = builder.createQuery(User.class);
+		Root<User> user = criteriaQuery.from(User.class);
+		user.fetch("groups", JoinType.LEFT);
+		
+		criteriaQuery.where(builder.equal(user.get("id"), id));
+
+		TypedQuery<User> query =  manager.createQuery(criteriaQuery);
+		
+		return query.getSingleResult();
+	}
+	
 	private Long total(UserFilter filter) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
