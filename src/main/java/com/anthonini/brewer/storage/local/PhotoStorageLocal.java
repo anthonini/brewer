@@ -99,6 +99,11 @@ public class PhotoStorageLocal implements PhotoStorage {
 			throw new RuntimeException("Error reading photo.", e);
 		}
 	}
+	
+	@Override
+	public byte[] recoverThumbnail(String photo) {
+		return recovery("thumbnail." + photo);
+	}
 
 	private String renameFile(String originalFilename) {
 		String newName = UUID.randomUUID().toString() + "_" + originalFilename;
@@ -109,5 +114,4 @@ public class PhotoStorageLocal implements PhotoStorage {
 		
 		return newName;
 	}
-
 }

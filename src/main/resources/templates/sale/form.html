@@ -68,6 +68,7 @@
 					<label class="control-label" for="clientName">Cliente</label>
 					<div class="input-group">
 					<input type="hidden" id="clientId" th:field="*{client.id}"/>
+					<input type="hidden" id="clientEmail" th:field="*{client.email}"/>
 				      <input id="clientName" type="text" readonly="readonly" class="form-control" placeholder="Clique na lupa para pesquisar o cliente" th:field="*{client.name}"/>
 				      <span class="input-group-btn">
 				        <button class="btn  btn-default  js-tooltip" type="button" title="Pesquisa avançada"

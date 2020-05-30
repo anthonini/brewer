@@ -84,13 +84,15 @@ public class Sale implements Serializable {
 		this.items.forEach(i -> i.setSale(this));
 	}
 	
+	public BigDecimal getItemsTotalValue() {
+		return getItems().stream()
+				.map(SaleItem::getTotalValue)
+				.reduce(BigDecimal::add)
+				.orElse(BigDecimal.ZERO);
+	}
+	
 	public void calculateTotalValue() {
-		BigDecimal itemsTotalValue = getItems().stream()
-		.map(SaleItem::getTotalValue)
-		.reduce(BigDecimal::add)
-		.orElse(BigDecimal.ZERO);
-		
-		this.totalValue = calculateTotalValue(itemsTotalValue, getShippingValue(), getDiscountValue());
+		this.totalValue = calculateTotalValue(getItemsTotalValue(), getShippingValue(), getDiscountValue());
 	}
 	
 	private BigDecimal calculateTotalValue(BigDecimal ItemsTotalValue, BigDecimal shippingValue, BigDecimal discountValue) {

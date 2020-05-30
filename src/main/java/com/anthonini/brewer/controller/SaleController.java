@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.anthonini.brewer.controller.page.PageWrapper;
 import com.anthonini.brewer.controller.validator.SaleValidator;
+import com.anthonini.brewer.mail.Mailer;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.model.Sale;
 import com.anthonini.brewer.model.SaleStatus;
@@ -52,6 +53,9 @@ public class SaleController {
 	
 	@Autowired
 	private SaleValidator saleValidator;
+	
+	@Autowired
+	private Mailer mailer;
 	
 	@InitBinder("sale")
 	public void iniializateValidator(WebDataBinder binder) {
@@ -111,8 +115,10 @@ public class SaleController {
 		
 		sale.setUser(systemUser.getUser());
 		
-		saleService.save(sale);
-		redirectAttributes.addFlashAttribute("successMessage", "Venda salva e email enviado com sucesso!");
+		sale = saleService.save(sale);
+		mailer.send(sale);
+		
+		redirectAttributes.addFlashAttribute("successMessage", String.format("Venda nº %d salva com sucesso e e-mail enviado!", sale.getId()));
 		return new ModelAndView("redirect:new");
 	}
 	

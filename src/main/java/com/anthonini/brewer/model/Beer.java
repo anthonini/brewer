@@ -199,6 +199,10 @@ public class Beer implements Serializable {
 	public String getPhotoOrMock() {
 		return !StringUtils.isEmpty(photo) ? photo : "beer-mock.png";
 	}
+	
+	public boolean hasPhoto() {
+		return !StringUtils.isEmpty(this.getPhoto());
+	}
 
 	@Override
 	public int hashCode() {
@@ -223,6 +227,5 @@ public class Beer implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	
+	}	
 }

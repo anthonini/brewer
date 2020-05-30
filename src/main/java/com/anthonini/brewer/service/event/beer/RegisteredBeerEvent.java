@@ -1,7 +1,5 @@
 package com.anthonini.brewer.service.event.beer;
 
-import org.springframework.util.StringUtils;
-
 import com.anthonini.brewer.model.Beer;
 
 public class RegisteredBeerEvent {
@@ -17,6 +15,6 @@ public class RegisteredBeerEvent {
 	}
 	
 	public boolean hasPhoto() {
-		return !StringUtils.isEmpty(beer.getPhoto());
+		return beer.hasPhoto();
 	}
 }

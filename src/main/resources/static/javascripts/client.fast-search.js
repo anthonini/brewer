@@ -66,6 +66,7 @@ Brewer.FastClientSearchTable = (function() {
 		var selectedClient = $(event.currentTarget);
 		$('#clientName').val(selectedClient.data('name'));
 		$('#clientId').val(selectedClient.data('id'));
+		$('#clientEmail').val(selectedClient.data('email'));
 		
 		this.modalClient.modal('hide');		
 	}

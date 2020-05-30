@@ -19,7 +19,7 @@ public class SaleService {
 	private SaleRepository saleRepository;
 	
 	@Transactional
-	public void save(Sale sale) {
+	public Sale save(Sale sale) {
 		if(sale.isNew()) {
 			sale.setCreationDate(LocalDateTime.now());
 		}
@@ -28,7 +28,7 @@ public class SaleService {
 			sale.setDeliveryDateTime(LocalDateTime.of(sale.getDeliveryDate(), sale.getDeliveryTime() != null ? sale.getDeliveryTime() : LocalTime.NOON));
 		}
 		
-		saleRepository.save(sale);
+		return saleRepository.saveAndFlush(sale);
 	}
 
 	@Transactional
