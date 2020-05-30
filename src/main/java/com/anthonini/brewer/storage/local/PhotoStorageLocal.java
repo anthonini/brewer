@@ -20,6 +20,7 @@ import net.coobird.thumbnailator.name.Rename;
 public class PhotoStorageLocal implements PhotoStorage {
 
 	private static final Logger logger = LoggerFactory.getLogger(PhotoStorageLocal.class);
+	private static final String THUMBNAIL_PREFIX = "thumbnail.";
 	
 	private Path path;
 	private Path temporaryPath;
@@ -31,22 +32,6 @@ public class PhotoStorageLocal implements PhotoStorage {
 	public PhotoStorageLocal(Path path) {
 		this.path = path;
 		criarPastas();
-	}
-
-	private void criarPastas() {
-		try {
-			Files.createDirectories(this.path);
-			this.temporaryPath = getDefault().getPath(this.path.toString(), "temp");
-			Files.createDirectories(this.temporaryPath);
-			
-			if (logger.isDebugEnabled()) {
-				logger.debug("Created photo folders.");
-				logger.debug("Default folder: " + this.path.toAbsolutePath());
-				logger.debug("Temporary Folder: " + this.temporaryPath.toAbsolutePath());
-			}
-		} catch (IOException e) {
-			throw new RuntimeException("Error creating folder for saving photo", e);
-		}
 	}
 
 	@Override
@@ -102,7 +87,38 @@ public class PhotoStorageLocal implements PhotoStorage {
 	
 	@Override
 	public byte[] recoverThumbnail(String photo) {
-		return recovery("thumbnail." + photo);
+		return recovery(THUMBNAIL_PREFIX + photo);
+	}
+	
+	@Override
+	public void remove(String photo) {
+		try {
+			Files.deleteIfExists(this.path.resolve(photo));
+		} catch (IOException e) {
+			logger.warn(String.format("Erro ao apagar foto %s. Mensagem: %s", photo, e.getMessage()));
+		}
+		
+		try {
+			Files.deleteIfExists(this.path.resolve(THUMBNAIL_PREFIX + photo));
+		} catch (IOException e) {
+			logger.warn(String.format("Erro ao apagar a thumbnail da foto %s. Mensagem: %s", photo, e.getMessage()));
+		}
+	}
+	
+	private void criarPastas() {
+		try {
+			Files.createDirectories(this.path);
+			this.temporaryPath = getDefault().getPath(this.path.toString(), "temp");
+			Files.createDirectories(this.temporaryPath);
+			
+			if (logger.isDebugEnabled()) {
+				logger.debug("Created photo folders.");
+				logger.debug("Default folder: " + this.path.toAbsolutePath());
+				logger.debug("Temporary Folder: " + this.temporaryPath.toAbsolutePath());
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Error creating folder for saving photo", e);
+		}
 	}
 
 	private String renameFile(String originalFilename) {
