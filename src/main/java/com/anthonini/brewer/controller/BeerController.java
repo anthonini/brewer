@@ -55,8 +55,8 @@ public class BeerController {
 		return mv;
 	}
 	
-	@PostMapping("/new")
-	public ModelAndView create(@Valid Beer beer, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	@PostMapping({"/new", "/{\\d+}"})
+	public ModelAndView save(@Valid Beer beer, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			return form(beer);
 		}
@@ -94,5 +94,13 @@ public class BeerController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/{id}")
+	public ModelAndView update(@PathVariable("id") Beer beer) {
+		ModelAndView mv = form(beer);
+		mv.addObject(beer);
+		
+		return mv;
 	}
 }

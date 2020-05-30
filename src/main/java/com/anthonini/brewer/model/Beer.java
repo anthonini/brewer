@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
@@ -87,9 +88,24 @@ public class Beer implements Serializable {
 	@Column(name = "content_type")
 	private String contentType;
 	
+	@Transient
+	private boolean newPhoto;
+	
 	@PrePersist @PreUpdate
 	private void prePersistUpdate() {
 		sku = sku.toUpperCase();
+	}
+	
+	public String getPhotoOrMock() {
+		return !StringUtils.isEmpty(photo) ? photo : "beer-mock.png";
+	}
+	
+	public boolean hasPhoto() {
+		return !StringUtils.isEmpty(this.getPhoto());
+	}
+	
+	public boolean isNew() {
+		return id == null;
 	}
 
 	public Long getId() {
@@ -195,13 +211,13 @@ public class Beer implements Serializable {
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
 	}
-	
-	public String getPhotoOrMock() {
-		return !StringUtils.isEmpty(photo) ? photo : "beer-mock.png";
+
+	public boolean isNewPhoto() {
+		return newPhoto;
 	}
-	
-	public boolean hasPhoto() {
-		return !StringUtils.isEmpty(this.getPhoto());
+
+	public void setNewPhoto(boolean newPhoto) {
+		this.newPhoto = newPhoto;
 	}
 
 	@Override
