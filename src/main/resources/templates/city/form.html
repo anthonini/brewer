@@ -16,7 +16,8 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1>Cadastro de cidade</h1>
+						<h1 th:if="${city.new}">Cadastro de cidade</h1>
+						<h1 th:unless="${city.new}" th:text="|Edição da cidade ${city.name}|">Edição da cidade</h1>
 					</div>
 				
 					<div class="col-xs-2">
@@ -31,8 +32,9 @@
 		</div>
 
 		<div class="container-fluid">
-			<form method="POST" th:object="${city}" class="form-vertical  js-form-loading" th:action="@{/city/new}">
+			<form method="POST" th:object="${city}" class="form-vertical  js-form-loading" th:action="${city.new} ? @{/city/new} : @{/city/{id}(id=${city.id})}">
 				<brewer:message/>
+				<input type="hidden" th:field="*{id}">
 				
 				<div class="row">
 					<div class="col-sm-4 form-group bw-required" brewer:classforerror="state">

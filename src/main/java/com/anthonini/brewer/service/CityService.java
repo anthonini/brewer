@@ -20,7 +20,7 @@ public class CityService {
 	public void save(City city) throws CityAlreadyRegisteredException {
 		Optional<City> cityByNameAndState = cityRepository.findByNameAndState(city.getName(), city.getState());
 		
-		if(cityByNameAndState.isPresent()) {
+		if(cityByNameAndState.isPresent() && !cityByNameAndState.get().equals(city)) {
 			throw new CityAlreadyRegisteredException("Cidade já cadastrada");
 		}
 		

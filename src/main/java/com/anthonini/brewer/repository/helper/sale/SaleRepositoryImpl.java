@@ -52,10 +52,10 @@ public class SaleRepositoryImpl implements SaleRepositoryQueries {
 	public Sale findWithItems(Long id) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Sale> criteriaQuery = builder.createQuery(Sale.class);
-		Root<Sale> user = criteriaQuery.from(Sale.class);
-		user.fetch("items", JoinType.LEFT);
+		Root<Sale> sale = criteriaQuery.from(Sale.class);
+		sale.fetch("items", JoinType.LEFT);
 		
-		criteriaQuery.where(builder.equal(user.get("id"), id));
+		criteriaQuery.where(builder.equal(sale.get("id"), id));
 
 		TypedQuery<Sale> query =  manager.createQuery(criteriaQuery);
 		

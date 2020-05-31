@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,7 +60,7 @@ public class CityController {
 		return cityRepository.findByStateIdOrderByName(stateId);
 	}
 	
-	@PostMapping("/new")
+	@PostMapping({"/new" , "/{\\d+}"})
 	@CacheEvict(value = "cities", key = "#city.state.id", condition = "#city.hasState()")
 	public ModelAndView save(@Valid City city, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
@@ -84,6 +85,15 @@ public class CityController {
 
 		PageWrapper<City> pageWrapper = new PageWrapper<>(cityRepository.filter(cityFilter, pageable), httpServletRequest);
 		mv.addObject("page", pageWrapper);
+		
+		return mv;
+	}
+	
+	@GetMapping("/{id}")
+	public ModelAndView update(@PathVariable Long id) {
+		City city = cityRepository.findWithState(id);
+		ModelAndView mv = form(city);
+		mv.addObject(city);
 		
 		return mv;
 	}

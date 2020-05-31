@@ -9,4 +9,6 @@ import com.anthonini.brewer.repository.filter.CityFilter;
 public interface CityRepositoryQueries {
 
 	public Page<City> filter(CityFilter filter, Pageable pageable);
+	
+	public City findWithState(Long id);
 }

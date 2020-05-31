@@ -43,6 +43,20 @@ public class CityRepositoryImpl implements CityRepositoryQueries {
 		return new PageImpl<>(query.getResultList(), pageable, total(filter));
 	}
 	
+	@Override
+	public City findWithState(Long id) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<City> criteriaQuery = builder.createQuery(City.class);
+		Root<City> city = criteriaQuery.from(City.class);
+		city.fetch("state");
+		
+		criteriaQuery.where(builder.equal(city.get("id"), id));
+
+		TypedQuery<City> query =  manager.createQuery(criteriaQuery);
+		
+		return query.getSingleResult();
+	}
+	
 	private Long total(CityFilter filter) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
