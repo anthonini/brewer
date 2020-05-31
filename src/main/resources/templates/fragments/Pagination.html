@@ -9,9 +9,27 @@
 					<li th:class="${page.first} ? disabled">
 						<a th:href="${page.pageUrl(actualPage-1)}" th:remove="${page.first} ? tag"><span>&laquo;</span></a>
 					</li>
-					<th:block th:each="p : ${#numbers.sequence(1, page.total)}" th:with="pageNumber=${p - 1}">
+					<th:block th:if="${actualPage+1 > page.pageQuantity}">
+						<li>
+							<a th:href="${page.pageUrl(0)}">1</a>
+						</li>
+						<li th:class="disabled">
+							<a>...</a>
+						</li>
+					</th:block>
+					
+					<th:block th:each="p : ${#numbers.sequence(page.firstPage, page.lastPage)}" th:with="pageNumber=${p - 1}">
 						<li th:class="${actualPage == pageNumber} ? active">
 							<a th:href="${page.pageUrl(pageNumber)}">[[${p}]]</a>
+						</li>
+					</th:block>
+					
+					<th:block th:if="${page.total > page.pageQuantity && actualPage+2 < page.total}">
+						<li th:class="disabled">
+							<a>...</a>
+						</li>
+						<li>
+							<a th:href="${page.pageUrl(page.total-1)}">[[${page.total}]]</a>
 						</li>
 					</th:block>
 					
