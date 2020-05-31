@@ -7,8 +7,8 @@ Brewer.MaskMoney = (function(){
 	}
 	
 	MaskMoney.prototype.enable = function() {
-		this.decimal.maskMoney({ decimal: ',', thousands: '.' })
-		this.numero.maskMoney({ precision: 0, thousands: '.' });
+		this.decimal.maskNumber({ decimal: ',', thousands: '.' })
+		this.numero.maskNumber({ integer: true, thousands: '.' });
 	}
 	
 	return MaskMoney;
