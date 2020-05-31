@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +64,7 @@ public class Sale implements Serializable {
 	@JoinColumn(name = "id_user")
 	private User user;
 	
-	@OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<SaleItem> items = new ArrayList<>();
 	
 	@Transient
@@ -100,6 +101,11 @@ public class Sale implements Serializable {
 				.add(Optional.ofNullable(shippingValue).orElse(BigDecimal.ZERO))
 				.subtract(Optional.ofNullable(discountValue).orElse(BigDecimal.ZERO));
 		return valorTotal;
+	}
+	
+	public Long getDaysFromCreation() {
+		LocalDate inicio = creationDate != null ? creationDate.toLocalDate() : LocalDate.now();
+		return ChronoUnit.DAYS.between(inicio, LocalDate.now());
 	}
 
 	public Long getId() {

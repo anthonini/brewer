@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -45,6 +46,20 @@ public class SaleRepositoryImpl implements SaleRepositoryQueries {
 		TypedQuery<Sale> query = paginationUtil.prepare(builder, criteriaQuery, sale, pageable);
 			 
 		return new PageImpl<>(query.getResultList(), pageable, total(filter));
+	}
+	
+	@Override
+	public Sale findWithItems(Long id) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Sale> criteriaQuery = builder.createQuery(Sale.class);
+		Root<Sale> user = criteriaQuery.from(Sale.class);
+		user.fetch("items", JoinType.LEFT);
+		
+		criteriaQuery.where(builder.equal(user.get("id"), id));
+
+		TypedQuery<Sale> query =  manager.createQuery(criteriaQuery);
+		
+		return query.getSingleResult();
 	}
 	
 	private Long total(SaleFilter filter) {

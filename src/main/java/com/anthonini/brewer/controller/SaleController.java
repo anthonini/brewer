@@ -27,6 +27,7 @@ import com.anthonini.brewer.controller.validator.SaleValidator;
 import com.anthonini.brewer.mail.Mailer;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.model.Sale;
+import com.anthonini.brewer.model.SaleItem;
 import com.anthonini.brewer.model.SaleStatus;
 import com.anthonini.brewer.repository.BeerRepository;
 import com.anthonini.brewer.repository.SaleRepository;
@@ -66,9 +67,7 @@ public class SaleController {
 	public ModelAndView form(Sale sale) {
 		ModelAndView mv = new ModelAndView("sale/form");
 		
-		if(StringUtils.isEmpty(sale.getUuid())) {
-			sale.setUuid(UUID.randomUUID().toString());
-		}
+		setUuid(sale);
 		
 		mv.addObject("items", sale.getItems());
 		mv.addObject("shippingValue", sale.getShippingValue());
@@ -159,6 +158,21 @@ public class SaleController {
 		
 		return mv;
 	}
+	
+	@GetMapping("/{id}")
+	public ModelAndView update(@PathVariable Long id) {
+		Sale sale = saleRepository.findWithItems(id);
+		
+		setUuid(sale);
+		for(SaleItem saleItem : sale.getItems()) {
+			saleItemsTableSession.addItem(sale.getUuid(), saleItem.getBeer(), saleItem.getQuantity());
+		}
+		
+		ModelAndView mv = form(sale);
+		mv.addObject(sale);
+		
+		return mv;
+	}
 
 	private ModelAndView mvSaleItemsTable(String uuid) {
 		ModelAndView mv = new ModelAndView("sale/SaleItemsTable");
@@ -173,5 +187,11 @@ public class SaleController {
 		sale.calculateTotalValue();
 		
 		saleValidator.validate(sale, bindingResult);
+	}
+	
+	private void setUuid(Sale sale) {
+		if(StringUtils.isEmpty(sale.getUuid())) {
+			sale.setUuid(UUID.randomUUID().toString());
+		}
 	}
 }

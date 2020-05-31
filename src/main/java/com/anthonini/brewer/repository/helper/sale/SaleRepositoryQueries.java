@@ -9,4 +9,6 @@ import com.anthonini.brewer.repository.filter.SaleFilter;
 public interface SaleRepositoryQueries {
 
 	public Page<Sale> filter(SaleFilter filter, Pageable pageable);
+	
+	public Sale findWithItems(Long id);
 }

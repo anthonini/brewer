@@ -3,6 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout-default}"
+	xmlns:data="http://www.thymeleaf.org/extras/data"
 	xmlns:brewer="http://brewer.anthonini.com">
 	
 <head>
@@ -110,7 +111,7 @@
 						<td th:text="${sale.user.name}"></td>
 						<td th:text="${sale.status.description}"></td>
 	                 	<td class="text-center">
-		   					<a class="btn  btn-link  btn-xs  js-tooltip" title="Editar" href="#">
+		   					<a class="btn  btn-link  btn-xs  js-tooltip" title="Editar" th:href="@{/sale/{id}(id=${sale.id})}">
 		   						<i class="glyphicon glyphicon-pencil"></i>
 		   					</a>
 	                 	</td>

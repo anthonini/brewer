@@ -22,6 +22,9 @@ public class SaleService {
 	public Sale save(Sale sale) {
 		if(sale.isNew()) {
 			sale.setCreationDate(LocalDateTime.now());
+		} else {
+			Sale saleDB = saleRepository.findOne(sale.getId());
+			sale.setCreationDate(saleDB.getCreationDate());
 		}
 		
 		if (sale.getDeliveryDate() != null) {
