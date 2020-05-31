@@ -6,18 +6,23 @@ import java.time.LocalTime;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.anthonini.brewer.model.Sale;
 import com.anthonini.brewer.model.SaleStatus;
 import com.anthonini.brewer.repository.SaleRepository;
+import com.anthonini.brewer.service.event.sale.SaleEvent;
 
 @Service
 public class SaleService {
 
 	@Autowired
 	private SaleRepository saleRepository;
+	
+	@Autowired
+	private ApplicationEventPublisher publisher;	
 	
 	@Transactional
 	public Sale save(Sale sale) {
@@ -43,6 +48,8 @@ public class SaleService {
 	public void emmit(Sale sale) {
 		sale.setStatus(SaleStatus.EMITIDA);
 		save(sale);
+		
+		publisher.publishEvent(new SaleEvent(sale));
 	}
 
 	@PreAuthorize("#sale.user == principal.user or hasRole('SALE_CANCEL')")
