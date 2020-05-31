@@ -42,7 +42,57 @@ Brewer.MonthSaleChart = (function() {
 	
 }());
 
+Brewer.SaleByOriginChart = (function() {
+	
+	function SaleByOriginChart() {
+		this.ctx = $('#saleByOriginChart')[0].getContext('2d');
+	}
+	
+	SaleByOriginChart.prototype.iniciar = function() {
+		$.ajax({
+			url: 'sale/byOrigin',
+			method: 'GET', 
+			success: onReceivedData.bind(this)
+		});
+	}
+	
+	function onReceivedData(originSales) {
+		var months = [];
+		var nationalBeers = [];
+		var internationalBeers = [];
+		
+		originSales.forEach(function(originSale) {
+			months.unshift(originSale.month);
+			nationalBeers.unshift(originSale.totalNational);
+			internationalBeers.unshift(originSale.totalInternational)
+		});
+		
+		var saleByOriginChart = new Chart(this.ctx, {
+		    type: 'bar',
+		    data: {
+		    	labels: months,
+		    	datasets: [{
+		    		label: 'Nacional',
+		    		backgroundColor: "rgba(220,220,220,0.5)",
+	                data: nationalBeers
+		    	},
+		    	{
+		    		label: 'Internacional',
+		    		backgroundColor: "rgba(26,179,148,0.5)",
+	                data: internationalBeers
+		    	}]
+		    },
+		});
+	}
+	
+	return SaleByOriginChart;
+	
+}());
+
 $(function() {
 	var monthSaleChart = new Brewer.MonthSaleChart();
 	monthSaleChart.iniciar();
+	
+	var saleByOriginChart = new Brewer.SaleByOriginChart();
+	saleByOriginChart.iniciar();
 });

@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.anthonini.brewer.controller.page.PageWrapper;
 import com.anthonini.brewer.controller.validator.SaleValidator;
 import com.anthonini.brewer.dto.MonthSale;
+import com.anthonini.brewer.dto.OriginSale;
 import com.anthonini.brewer.mail.Mailer;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.model.Sale;
@@ -193,6 +194,11 @@ public class SaleController {
 	@GetMapping("/totalByMonth")
 	public @ResponseBody List<MonthSale> listTotalByMonth() {
 		return saleRepository.totalByMonth();
+	}
+	
+	@GetMapping("/byOrigin")
+	public @ResponseBody List<OriginSale> listByOrigin() {
+		return saleRepository.byOrigin();
 	}
 
 	private ModelAndView mvSaleItemsTable(String uuid) {

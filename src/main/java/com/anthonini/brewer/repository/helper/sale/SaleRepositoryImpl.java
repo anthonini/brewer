@@ -26,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import com.anthonini.brewer.dto.MonthSale;
+import com.anthonini.brewer.dto.OriginSale;
 import com.anthonini.brewer.model.PersonType;
 import com.anthonini.brewer.model.Sale;
 import com.anthonini.brewer.model.SaleStatus;
@@ -114,6 +115,26 @@ public class SaleRepositoryImpl implements SaleRepositoryQueries {
 		}
 		
 		return monthSales;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<OriginSale> byOrigin() {
+		List<OriginSale> originSales = manager.createNamedQuery("Sale.byOrigin").getResultList();
+		
+		LocalDate now = LocalDate.now();
+		for (int i = 1; i <= 6; i++) {
+			String idealMonth = String.format("%d/%02d", now.getYear(), now.getMonth().getValue());
+			
+			boolean possuiMes = originSales.stream().filter(s -> s.getMonth().equals(idealMonth)).findAny().isPresent();
+			if (!possuiMes) {
+				originSales.add(i - 1, new OriginSale(idealMonth, 0, 0));
+			}
+			
+			now = now.minusMonths(1);
+		}
+		
+		return originSales;
 	}
 	
 	private Long total(SaleFilter filter) {
