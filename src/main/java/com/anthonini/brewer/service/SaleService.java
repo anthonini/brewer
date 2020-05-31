@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.anthonini.brewer.model.Sale;
@@ -20,6 +21,10 @@ public class SaleService {
 	
 	@Transactional
 	public Sale save(Sale sale) {
+		if(sale.isSaveForbidden()) {
+			throw new RuntimeException("Usuário tentando salvar uma venda proibida!");
+		}
+		
 		if(sale.isNew()) {
 			sale.setCreationDate(LocalDateTime.now());
 		} else {
@@ -37,6 +42,15 @@ public class SaleService {
 	@Transactional
 	public void emmit(Sale sale) {
 		sale.setStatus(SaleStatus.EMITIDA);
+		save(sale);
+	}
+
+	@PreAuthorize("#sale.user == principal.user or hasRole('SALE_CANCEL')")
+	@Transactional
+	public void cancel(Sale sale) {
+		sale = saleRepository.findOne(sale.getId());
+		
+		sale.setStatus(SaleStatus.CANCELADA);
 		save(sale);
 	}
 }

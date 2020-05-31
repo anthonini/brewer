@@ -64,7 +64,7 @@ public class UserController {
 		
 		try {
 			userService.save(user);
-			redirectAttributes.addFlashAttribute("successMessage", "User succesffuly saved!");
+			redirectAttributes.addFlashAttribute("successMessage", "Usuário salvo com sucesso!");
 			return new ModelAndView("redirect:new");
 		}catch (UserEmailAlreadyRegisteredException e) {
 			bindingResult.rejectValue("email", e.getMessage(), e.getMessage());

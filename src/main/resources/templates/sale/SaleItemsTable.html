@@ -17,13 +17,14 @@
 		<div class="bw-item-table__column  bw-item-table__column--values">
 			<div class="bw-beer-table-small-value">
 				<input type="text" maxlength="3" class="bw-beer-table-quantity-field js-beer-table-quantity" 
-					th:value="${item.quantity}" data:beer-id="${item.beer.id}"/>
+					th:value="${item.quantity}" data:beer-id="${item.beer.id}"
+					th:disabled="${sale != null ? sale.saveForbidden : false}"/>
 				<span>x R$[[${{item.unityValue}}]]</span>
 			</div>
 			<div class="bw-beer-table-big-value">R$[[${{item.totalValue}}]]</div>
 		</div>
 		
-		<div class="bw-item-table__exclusion-panel">
+		<div class="bw-item-table__exclusion-panel" th:if="${sale != null ? sale.savePermitted : true}">
 			<span class="bw-item-table__exclusion-title">Excluir este item da venda?</span>
 			<button type="button" class="btn  btn-danger js-item-exclusion-btn" data:beer-id="${item.beer.id}">Sim, excluir!</button>
 		</div>

@@ -24,8 +24,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
 @Table(name = "sale")
+@DynamicUpdate
 public class Sale implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -106,6 +109,14 @@ public class Sale implements Serializable {
 	public Long getDaysFromCreation() {
 		LocalDate inicio = creationDate != null ? creationDate.toLocalDate() : LocalDate.now();
 		return ChronoUnit.DAYS.between(inicio, LocalDate.now());
+	}
+	
+	public boolean isSavePermitted() {
+		return !this.status.equals(SaleStatus.CANCELADA);
+	}
+	
+	public boolean isSaveForbidden() {
+		return !isSavePermitted();
 	}
 
 	public Long getId() {
