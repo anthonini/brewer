@@ -22,6 +22,7 @@ import com.anthonini.brewer.dto.StockItemsValue;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.repository.filter.BeerFilter;
 import com.anthonini.brewer.repository.pagination.PaginationUtil;
+import com.anthonini.brewer.storage.PhotoStorage;
 
 public class BeerRepositoryImpl implements BeerRepositoryQueries {
 
@@ -30,6 +31,9 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 	
 	@Autowired
 	private PaginationUtil<Beer> paginationUtil;
+	
+	@Autowired
+	private PhotoStorage photoStorage;
 	
 	@Override
 	public Page<Beer> filter(BeerFilter filter, Pageable pageable) {
@@ -107,8 +111,12 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 					  "from Beer "+
 					  "where lower(sku) like lower(:skuOrName) or lower(name) like lower(:skuOrName)";
 		
-		return manager.createQuery(jpql, BeerDTO.class)
+		List<BeerDTO> filteredBeers = manager.createQuery(jpql, BeerDTO.class)
 					  .setParameter("skuOrName", skuOrName + "%")
-					  .getResultList();		
+					  .getResultList();
+		
+		filteredBeers.forEach(b -> b.setUrlThumbnailPhoto(photoStorage.getUrl(PhotoStorage.THUMBNAIL_PREFIX + b.getPhoto())));
+		
+		return filteredBeers;
 	}
 }

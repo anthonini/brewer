@@ -2,6 +2,8 @@ package com.anthonini.brewer.config.init;
 
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 
 import org.springframework.web.filter.HttpPutFormContentFilter;
@@ -9,6 +11,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 import com.anthonini.brewer.config.JPAConfig;
 import com.anthonini.brewer.config.MailConfig;
+import com.anthonini.brewer.config.S3Config;
 import com.anthonini.brewer.config.SecurityConfig;
 import com.anthonini.brewer.config.ServiceConfig;
 import com.anthonini.brewer.config.WebConfig;
@@ -26,7 +29,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class<?>[] { WebConfig.class, MailConfig.class };
+		return new Class<?>[] { WebConfig.class, MailConfig.class, S3Config.class };
 	}
 
 	@Override
@@ -44,5 +47,11 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	protected void customizeRegistration(Dynamic registration) {
 		registration.setMultipartConfig(new MultipartConfigElement(""));
 	}
+	
+	@Override
+		public void onStartup(ServletContext servletContext) throws ServletException {
+			super.onStartup(servletContext);
+			servletContext.setInitParameter("spring.profiles.default", "local");
+		}
 
 }

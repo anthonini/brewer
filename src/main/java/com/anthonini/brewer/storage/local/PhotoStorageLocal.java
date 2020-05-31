@@ -10,6 +10,8 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.anthonini.brewer.storage.PhotoStorage;
@@ -17,13 +19,14 @@ import com.anthonini.brewer.storage.PhotoStorage;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
 
+@Profile("local")
+@Component
 public class PhotoStorageLocal implements PhotoStorage {
 
 	private static final Logger logger = LoggerFactory.getLogger(PhotoStorageLocal.class);
 	private static final String THUMBNAIL_PREFIX = "thumbnail.";
 	
 	private Path path;
-	private Path temporaryPath;
 	
 	public PhotoStorageLocal() {
 		this(getDefault().getPath(System.getenv("HOME"), ".brewerphotos"));
@@ -35,44 +38,25 @@ public class PhotoStorageLocal implements PhotoStorage {
 	}
 
 	@Override
-	public String temporarilySave(MultipartFile[] files) {
+	public String save(MultipartFile[] files) {
 		String newName = null;
 		if (files != null && files.length > 0) {
 			MultipartFile file = files[0];
 			newName = renameFile(file.getOriginalFilename());
 			try {
-				file.transferTo(new File(this.temporaryPath.toAbsolutePath().toString() + getDefault().getSeparator() + newName));
+				file.transferTo(new File(this.path.toAbsolutePath().toString() + getDefault().getSeparator() + newName));
 			} catch (IOException e) {
-				throw new RuntimeException("Error saving photo in temporarily folder.", e);
+				throw new RuntimeException("Error saving photo.", e);
 			}
 		}
 		
-		return newName;
-	}
-	
-	@Override
-	public byte[] recoverTemporaryPhoto(String name) {
 		try {
-			return Files.readAllBytes(this.temporaryPath.resolve(name));
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Error reading temporary photo.", e);
-		}
-	}
-	
-	@Override
-	public void save(String photo) {
-		try {
-			Files.move(this.temporaryPath.resolve(photo),this.path.resolve(photo));
-		} catch (IOException e) {
-			throw new RuntimeException("Error moving photo to final destination.", e);
-		}
-		
-		try {
-			Thumbnails.of(this.path.resolve(photo).toString()).size(40, 68).toFiles(Rename.PREFIX_DOT_THUMBNAIL);
+			Thumbnails.of(this.path.resolve(newName).toString()).size(40, 68).toFiles(Rename.PREFIX_DOT_THUMBNAIL);
 		} catch (IOException e) {
 			throw new RuntimeException("Erro generating thumbnail", e);
 		}
+		
+		return newName;
 	}
 	
 	@Override
@@ -105,16 +89,18 @@ public class PhotoStorageLocal implements PhotoStorage {
 		}
 	}
 	
+	@Override
+	public String getUrl(String photo) {
+		return "http://localhost:8080/brewer/photos/" + photo;
+	}
+	
 	private void criarPastas() {
 		try {
 			Files.createDirectories(this.path);
-			this.temporaryPath = getDefault().getPath(this.path.toString(), "temp");
-			Files.createDirectories(this.temporaryPath);
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("Created photo folders.");
 				logger.debug("Default folder: " + this.path.toAbsolutePath());
-				logger.debug("Temporary Folder: " + this.temporaryPath.toAbsolutePath());
 			}
 		} catch (IOException e) {
 			throw new RuntimeException("Error creating folder for saving photo", e);

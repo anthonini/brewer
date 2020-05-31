@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -26,8 +27,10 @@ import javax.validation.constraints.Size;
 
 import org.springframework.util.StringUtils;
 
+import com.anthonini.brewer.repository.listener.BeerEntityListener;
 import com.anthonini.brewer.validation.SKU;
 
+@EntityListeners(BeerEntityListener.class)
 @Entity
 @Table(name = "beer")
 public class Beer implements Serializable {
@@ -90,6 +93,12 @@ public class Beer implements Serializable {
 	
 	@Transient
 	private boolean newPhoto;
+	
+	@Transient
+	private String urlPhoto;
+	
+	@Transient
+	private String urlThumbnailPhoto;
 	
 	@PrePersist @PreUpdate
 	private void prePersistUpdate() {
@@ -218,6 +227,22 @@ public class Beer implements Serializable {
 
 	public void setNewPhoto(boolean newPhoto) {
 		this.newPhoto = newPhoto;
+	}
+
+	public String getUrlPhoto() {
+		return urlPhoto;
+	}
+
+	public void setUrlPhoto(String urlPhoto) {
+		this.urlPhoto = urlPhoto;
+	}
+
+	public String getUrlThumbnailPhoto() {
+		return urlThumbnailPhoto;
+	}
+
+	public void setUrlThumbnailPhoto(String urlThumbnailPhoto) {
+		this.urlThumbnailPhoto = urlThumbnailPhoto;
 	}
 
 	@Override

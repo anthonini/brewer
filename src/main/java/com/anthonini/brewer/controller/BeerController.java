@@ -61,7 +61,7 @@ public class BeerController {
 			return form(beer);
 		}
 		
-		redirectAttributes.addFlashAttribute("successMessage", "Beer successfully saved!");
+		redirectAttributes.addFlashAttribute("successMessage", "Cerveja salva com sucesso!");
 		beerService.save(beer);
 		
 		return new ModelAndView("redirect:new");

@@ -113,7 +113,8 @@
 				<tbody>
 					<tr th:each="beer : ${page.content}">
 						<td class="text-center">
-							<img th:src="@{/photos/thumbnail.{photo}(photo=${beer.photoOrMock})}" class="img-responsive"/>
+							<!-- <img th:src="@{/photos/thumbnail.{photo}(photo=${beer.photoOrMock})}" class="img-responsive"/> -->
+							<img th:src="${beer.urlThumbnailPhoto}" class="img-responsive"/>
 						</td>
 						<td class="text-center" th:text="${beer.sku}">AA1234</td>
 						<td th:text="${beer.name}">Cerveja Stella</td>

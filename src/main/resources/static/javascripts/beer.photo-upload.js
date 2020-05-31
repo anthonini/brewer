@@ -5,6 +5,7 @@ Brewer.PhotoUpload = (function() {
 	function PhotoUpload() {
 		this.inputPhotoName = $('input[name=photo]');
 		this.inputContentType = $('input[name=contentType]');
+		this.inputUrlPhoto = $('input[name=urlPhoto');
 		this.newPhoto = $('input[name=newPhoto');
 		
 		this.htmlBeerPhotoTemplate = $('#beer-photo').html();
@@ -28,12 +29,18 @@ Brewer.PhotoUpload = (function() {
 		UIkit.uploadDrop($('#upload-drop'),settings);
 		
 		if(this.inputPhotoName.val()) {
-			renderPhoto.call(this, {name: this.inputPhotoName.val(), contentType: this.inputContentType.val() });
+			renderPhoto.call(this, {
+				name: this.inputPhotoName.val(), 
+				contentType: this.inputContentType.val(), 
+				url: this.inputUrlPhoto.val()
+				}
+			);
 		}
 	}
 	
 	function onUploadComplete(answer) {
 		this.newPhoto.val('true');
+		this.inputUrlPhoto.val(answer.url);
 		renderPhoto.call(this, answer);
 	}
 	
@@ -43,13 +50,7 @@ Brewer.PhotoUpload = (function() {
 		
 		this.uploadDrop.addClass('hidden');
 		
-		var photo = '';
-		if (this.newPhoto.val() == 'true') {
-			photo = 'temp/';
-		}
-		photo += answer.name;
-		
-		var htmlBeerPhoto = this.template({photo: photo});
+		var htmlBeerPhoto = this.template({url: answer.url});
 		this.containerBeerPhoto.append(htmlBeerPhoto);
 		
 		$('.js-photo-remove').on('click', onPhotoRemove.bind(this));
