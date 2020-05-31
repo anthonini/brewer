@@ -51,6 +51,7 @@ public class JPAConfig {
 		factory.setDataSource(dataSource);
 		factory.setJpaVendorAdapter(jpaVendorAdapter);
 		factory.setPackagesToScan(Beer.class.getPackage().getName());
+		factory.setMappingResources("sql/native-queries.xml");
 		factory.afterPropertiesSet();
 		
 		return factory.getObject();

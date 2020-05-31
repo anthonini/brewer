@@ -1,5 +1,6 @@
 package com.anthonini.brewer.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,11 +21,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.anthonini.brewer.controller.page.PageWrapper;
 import com.anthonini.brewer.controller.validator.SaleValidator;
+import com.anthonini.brewer.dto.MonthSale;
 import com.anthonini.brewer.mail.Mailer;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.model.Sale;
@@ -185,6 +188,11 @@ public class SaleController {
 		mv.addObject(sale);
 		
 		return mv;
+	}
+	
+	@GetMapping("/totalByMonth")
+	public @ResponseBody List<MonthSale> listTotalByMonth() {
+		return saleRepository.totalByMonth();
 	}
 
 	private ModelAndView mvSaleItemsTable(String uuid) {

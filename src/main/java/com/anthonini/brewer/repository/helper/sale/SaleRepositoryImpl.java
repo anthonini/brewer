@@ -1,6 +1,7 @@
 package com.anthonini.brewer.repository.helper.sale;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.MonthDay;
@@ -24,6 +25,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
+import com.anthonini.brewer.dto.MonthSale;
 import com.anthonini.brewer.model.PersonType;
 import com.anthonini.brewer.model.Sale;
 import com.anthonini.brewer.model.SaleStatus;
@@ -92,6 +94,26 @@ public class SaleRepositoryImpl implements SaleRepositoryQueries {
 				.setParameter("status", SaleStatus.EMITIDA)
 				.getSingleResult());
 			return optional.orElse(BigDecimal.ZERO);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<MonthSale> totalByMonth() {
+		List<MonthSale> monthSales = manager.createNamedQuery("Sale.totalByMonth").getResultList();
+		
+		LocalDate today = LocalDate.now();
+		for (int i = 1; i <= 6; i++) {
+			String idealMonth = String.format("%d/%02d", today.getYear(), today.getMonthValue());
+			
+			boolean hasMonth = monthSales.stream().filter(v -> v.getMonth().equals(idealMonth)).findAny().isPresent();
+			if (!hasMonth) {
+				monthSales.add(i - 1, new MonthSale(idealMonth, 0));
+			}
+			
+			today = today.minusMonths(1);
+		}
+		
+		return monthSales;
 	}
 	
 	private Long total(SaleFilter filter) {
