@@ -1,5 +1,7 @@
 package com.anthonini.brewer.repository.helper.sale;
 
+import java.math.BigDecimal;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,4 +13,10 @@ public interface SaleRepositoryQueries {
 	public Page<Sale> filter(SaleFilter filter, Pageable pageable);
 	
 	public Sale findWithItems(Long id);
+	
+	public BigDecimal yearTotalValue();
+	
+	public BigDecimal monthTotalValue();
+	
+	public BigDecimal avgTicket();
 }

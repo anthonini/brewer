@@ -1,9 +1,13 @@
 package com.anthonini.brewer.repository.helper.sale;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.MonthDay;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 import com.anthonini.brewer.model.PersonType;
 import com.anthonini.brewer.model.Sale;
+import com.anthonini.brewer.model.SaleStatus;
 import com.anthonini.brewer.repository.filter.SaleFilter;
 import com.anthonini.brewer.repository.pagination.PaginationUtil;
 
@@ -60,6 +65,33 @@ public class SaleRepositoryImpl implements SaleRepositoryQueries {
 		TypedQuery<Sale> query =  manager.createQuery(criteriaQuery);
 		
 		return query.getSingleResult();
+	}
+	
+	@Override
+	public BigDecimal yearTotalValue() {
+		Optional<BigDecimal> optional = Optional.ofNullable(manager.createQuery("SELECT SUM(totalValue) From Sale WHERE YEAR(creationDate) = :year and status = :status", BigDecimal.class)
+			.setParameter("year", Year.now().getValue())
+			.setParameter("status", SaleStatus.EMITIDA)
+			.getSingleResult());
+		return optional.orElse(BigDecimal.ZERO);
+	}
+	
+	@Override
+	public BigDecimal monthTotalValue() {
+		Optional<BigDecimal> optional = Optional.ofNullable(manager.createQuery("SELECT SUM(totalValue) From Sale WHERE MONTH(creationDate) = :month and status = :status", BigDecimal.class)
+				.setParameter("month", MonthDay.now().getMonthValue())
+				.setParameter("status", SaleStatus.EMITIDA)
+				.getSingleResult());
+			return optional.orElse(BigDecimal.ZERO);
+	}
+	
+	@Override
+	public BigDecimal avgTicket() {
+		Optional<BigDecimal> optional = Optional.ofNullable(manager.createQuery("SELECT SUM(totalValue)/count(*) From Sale WHERE YEAR(creationDate) = :year and status = :status", BigDecimal.class)
+				.setParameter("year", Year.now().getValue())
+				.setParameter("status", SaleStatus.EMITIDA)
+				.getSingleResult());
+			return optional.orElse(BigDecimal.ZERO);
 	}
 	
 	private Long total(SaleFilter filter) {
@@ -113,5 +145,4 @@ public class SaleRepositoryImpl implements SaleRepositoryQueries {
 		
 		return where.stream().toArray(Predicate[]::new);
 	}
-
 }

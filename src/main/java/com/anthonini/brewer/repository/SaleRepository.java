@@ -7,4 +7,6 @@ import com.anthonini.brewer.repository.helper.sale.SaleRepositoryQueries;
 
 public interface SaleRepository extends JpaRepository<Sale, Long>, SaleRepositoryQueries {
 
+	
+
 }
