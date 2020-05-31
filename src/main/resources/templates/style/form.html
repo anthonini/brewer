@@ -16,7 +16,8 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1>Cadastro de estilo</h1>
+						<h1 th:if="${style.new}">Cadastro de estilo</h1>
+						<h1 th:unless="${style.new}" th:text="|Edição do estilo ${style.name}|">Edição do estilo</h1>
 					</div>
 				
 					<div class="col-xs-2">
@@ -31,8 +32,9 @@
 		</div>
 
 		<div class="container-fluid">
-			<form method="POST" th:object="${style}" class="form-vertical  js-form-loading" th:action="@{/style/new}">
+			<form method="POST" th:object="${style}" class="form-vertical  js-form-loading" th:action="${style.new} ? @{/style/new} : @{/style/{id}(id=${style.id})}">
 				<brewer:message/>
+				<input type="hidden" th:field="*{id}">
 				
 				<div class="row">					
 					<div class="col-xs-12 form-group bw-required">
