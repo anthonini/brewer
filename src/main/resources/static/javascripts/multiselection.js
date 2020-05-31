@@ -34,7 +34,8 @@ Brewer.MultiSelection = (function() {
 				},
 				success: function () {
 					window.location.reload();
-				}
+				},
+				error: onExclusionError.bind(this)
 			});
 		}
 	}
@@ -53,6 +54,10 @@ Brewer.MultiSelection = (function() {
 	
 	function actionButtonStatus(activate) {
 		activate ? this.statusBtn.removeClass('disabled') : this.statusBtn.addClass('disabled');
+	}
+	
+	function onExclusionError(e) {
+		swal('Oops!', e.responseText, 'error');
 	}
 	
 	return MultiSelection;

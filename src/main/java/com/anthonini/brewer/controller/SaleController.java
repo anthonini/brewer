@@ -149,7 +149,7 @@ public class SaleController {
 	}
 	
 	@GetMapping
-	public ModelAndView list(SaleFilter saleFilter, @PageableDefault(size = 3) Pageable pageable,
+	public ModelAndView list(SaleFilter saleFilter, @PageableDefault(size = 10) Pageable pageable,
 			HttpServletRequest httpServletRequest) {
 		ModelAndView mv = new ModelAndView("sale/list");
 		mv.addObject("allStatus", SaleStatus.values());
