@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -52,7 +53,7 @@ public class ClientController {
 		return mv;
 	}
 	
-	@PostMapping("/new")
+	@PostMapping({"/new", "/{\\d+}"})
 	public ModelAndView save(@Valid Client client, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			return form(client);
@@ -61,7 +62,7 @@ public class ClientController {
 		try {
 			clientService.save(client);
 			
-			redirectAttributes.addFlashAttribute("successMessage", "Client successfully saved!");		
+			redirectAttributes.addFlashAttribute("successMessage", "Cliente salvo com sucesso!");		
 			return new ModelAndView("redirect:new");
 
 		}catch (AlreadyRegisteredClientCpfCnpjException e) {
@@ -85,6 +86,14 @@ public class ClientController {
 	public @ResponseBody List<Client> list(String name) {
 		validateNameLength(name);
 		return clientRepository.findByNameStartingWithIgnoreCase(name);
+	}
+	
+	@GetMapping("/{id}")
+	public ModelAndView update(@PathVariable("id") Client client) {
+		ModelAndView mv = form(client);
+		mv.addObject(client);
+		
+		return mv;
 	}
 
 	

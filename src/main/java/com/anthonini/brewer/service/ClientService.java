@@ -22,7 +22,7 @@ public class ClientService {
 	public void save(Client client) {
 		Optional<Client> existingClient = clientRepository.findByCpfCnpj(client.getCpfCnpjWithoutFormatting());
 		
-		if(existingClient.isPresent()) {
+		if(existingClient.isPresent() && !existingClient.get().equals(client)) {
 			throw new AlreadyRegisteredClientCpfCnpjException(String.format("%s já cadastrado", client.getPersonType().getDocument()));
 		}
 		

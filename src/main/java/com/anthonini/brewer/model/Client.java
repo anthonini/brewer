@@ -70,6 +70,10 @@ public class Client implements Serializable {
 	public String getCpfCnpjWithoutFormatting() {
 		return PersonType.removeFormatting(this.cpfCnpj);
 	}
+	
+	public boolean isNew() {
+		return id == null;
+	}
 
 	public Long getId() {
 		return id;
