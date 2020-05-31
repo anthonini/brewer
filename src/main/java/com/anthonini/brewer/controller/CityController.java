@@ -11,8 +11,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +31,7 @@ import com.anthonini.brewer.repository.StateRepository;
 import com.anthonini.brewer.repository.filter.CityFilter;
 import com.anthonini.brewer.service.CityService;
 import com.anthonini.brewer.service.exception.CityAlreadyRegisteredException;
+import com.anthonini.brewer.service.exception.NotPossibleDeleteEntityException;
 
 @Controller
 @RequestMapping("/city")
@@ -96,5 +99,15 @@ public class CityController {
 		mv.addObject(city);
 		
 		return mv;
+	}
+	
+	@DeleteMapping("/{id}")
+	public @ResponseBody ResponseEntity<?> delete(@PathVariable("id") City city) {
+		try {
+			cityService.delete(city);
+		} catch (NotPossibleDeleteEntityException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		return ResponseEntity.ok().build();
 	}
 }
