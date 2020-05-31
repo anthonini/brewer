@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import com.anthonini.brewer.dto.BeerDTO;
+import com.anthonini.brewer.dto.StockItemsValue;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.repository.filter.BeerFilter;
 import com.anthonini.brewer.repository.pagination.PaginationUtil;
@@ -42,6 +43,12 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 		TypedQuery<Beer> query = paginationUtil.prepare(builder, criteriaQuery, beer, pageable);
 		
 		return new PageImpl<>(query.getResultList(), pageable, total(filter));
+	}
+	
+	@Override
+	public StockItemsValue stockItemsValue() {
+		String query = "select new com.anthonini.brewer.dto.StockItemsValue(sum(value * stockQuantity), sum(stockQuantity)) from Beer";
+		return manager.createQuery(query, StockItemsValue.class).getSingleResult();
 	}
 	
 	private Long total(BeerFilter filter) {

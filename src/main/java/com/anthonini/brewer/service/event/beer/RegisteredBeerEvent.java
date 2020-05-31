@@ -17,4 +17,8 @@ public class RegisteredBeerEvent {
 	public boolean hasPhoto() {
 		return beer.hasPhoto();
 	}
+	
+	public boolean isNewPhoto() {
+		return beer.isNewPhoto();
+	}
 }

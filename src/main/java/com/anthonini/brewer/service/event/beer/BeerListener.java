@@ -12,7 +12,7 @@ public class BeerListener {
 	@Autowired
 	private PhotoStorage photoStorage;
 	
-	@EventListener(condition = "#event.hasPhoto()")
+	@EventListener(condition = "#event.hasPhoto() and #event.newPhoto")
 	public void RegisteredBeer(RegisteredBeerEvent event) {
 		photoStorage.save(event.getBeer().getPhoto());
 	}
