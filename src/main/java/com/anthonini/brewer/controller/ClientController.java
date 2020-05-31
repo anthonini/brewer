@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ import com.anthonini.brewer.repository.StateRepository;
 import com.anthonini.brewer.repository.filter.ClientFilter;
 import com.anthonini.brewer.service.ClientService;
 import com.anthonini.brewer.service.exception.AlreadyRegisteredClientCpfCnpjException;
+import com.anthonini.brewer.service.exception.NotPossibleDeleteEntityException;
 
 @Controller
 @RequestMapping("/client")
@@ -95,7 +97,16 @@ public class ClientController {
 		
 		return mv;
 	}
-
+	
+	@DeleteMapping("/{id}")
+	public @ResponseBody ResponseEntity<?> delete(@PathVariable("id") Client client) {
+		try {
+			clientService.delete(client);
+		} catch (NotPossibleDeleteEntityException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		return ResponseEntity.ok().build();
+	}
 	
 	private void validateNameLength(String name) {
 		if(StringUtils.isEmpty(name) || name.length() < 3) {
