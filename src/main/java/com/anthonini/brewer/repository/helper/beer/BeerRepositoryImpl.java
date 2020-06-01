@@ -50,6 +50,21 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 	}
 	
 	@Override
+	public List<BeerDTO> findBySkuOrName(String skuOrName) {
+		String jpql = "select new com.anthonini.brewer.dto.BeerDTO(id, sku, name, origin, value, photo) " +
+					  "from Beer "+
+					  "where lower(sku) like lower(:skuOrName) or lower(name) like lower(:skuOrName)";
+		
+		List<BeerDTO> filteredBeers = manager.createQuery(jpql, BeerDTO.class)
+					  .setParameter("skuOrName", skuOrName + "%")
+					  .getResultList();
+		
+		filteredBeers.forEach(b -> b.setUrlThumbnailPhoto(photoStorage.getUrl(PhotoStorage.THUMBNAIL_PREFIX + b.getPhoto())));
+		
+		return filteredBeers;
+	}
+	
+	@Override
 	public StockItemsValue stockItemsValue() {
 		String query = "select new com.anthonini.brewer.dto.StockItemsValue(sum(value * stockQuantity), sum(stockQuantity)) from Beer";
 		return manager.createQuery(query, StockItemsValue.class).getSingleResult();
@@ -103,20 +118,5 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 
 	private boolean hasStyle(BeerFilter filter) {
 		return filter.getStyle() != null && filter.getStyle().getId()!= null;
-	}
-	
-	@Override
-	public List<BeerDTO> findBySkuOrName(String skuOrName) {
-		String jpql = "select new com.anthonini.brewer.dto.BeerDTO(id, sku, name, origin, value, photo) " +
-					  "from Beer "+
-					  "where lower(sku) like lower(:skuOrName) or lower(name) like lower(:skuOrName)";
-		
-		List<BeerDTO> filteredBeers = manager.createQuery(jpql, BeerDTO.class)
-					  .setParameter("skuOrName", skuOrName + "%")
-					  .getResultList();
-		
-		filteredBeers.forEach(b -> b.setUrlThumbnailPhoto(photoStorage.getUrl(PhotoStorage.THUMBNAIL_PREFIX + b.getPhoto())));
-		
-		return filteredBeers;
 	}
 }

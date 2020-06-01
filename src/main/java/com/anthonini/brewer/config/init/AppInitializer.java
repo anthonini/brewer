@@ -21,15 +21,15 @@ import com.anthonini.brewer.config.WebConfig;
  * 
  **/
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-
+	
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] { JPAConfig.class, ServiceConfig.class, SecurityConfig.class };
+		return new Class<?>[] { JPAConfig.class, ServiceConfig.class, SecurityConfig.class, S3Config.class };
 	}
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class<?>[] { WebConfig.class, MailConfig.class, S3Config.class };
+		return new Class<?>[] { WebConfig.class, MailConfig.class };
 	}
 
 	@Override

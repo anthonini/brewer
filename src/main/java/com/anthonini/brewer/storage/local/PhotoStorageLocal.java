@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,15 +104,5 @@ public class PhotoStorageLocal implements PhotoStorage {
 		} catch (IOException e) {
 			throw new RuntimeException("Error creating folder for saving photo", e);
 		}
-	}
-
-	private String renameFile(String originalFilename) {
-		String newName = UUID.randomUUID().toString() + "_" + originalFilename;
-		
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("Original name: %s, new name: %s", originalFilename, newName));
-		}
-		
-		return newName;
 	}
 }

@@ -13,6 +13,7 @@ Brewer.PhotoUpload = (function() {
 		
 		this.uploadDrop = $('#upload-drop');
 		this.containerBeerPhoto = $('.js-beer-photo-container');
+		this.imgLoading = $('.js-img-loading');
 	}
 	
 	PhotoUpload.prototype.initiate = function() {
@@ -22,7 +23,8 @@ Brewer.PhotoUpload = (function() {
 				allow: '*.(jpg|jpeg|png)',
 				action: this.containerBeerPhoto.data('url-photo'),
 				complete: onUploadComplete.bind(this),
-				beforeSend: addCsrfToken
+				beforeSend: addCsrfToken,
+				loadstart: onLoadStart.bind(this)
 		}
 		
 		UIkit.uploadSelect($('#upload-select'),settings);
@@ -38,9 +40,14 @@ Brewer.PhotoUpload = (function() {
 		}
 	}
 	
+	function onLoadStart() {
+		this.imgLoading.removeClass('hidden');
+	}
+	
 	function onUploadComplete(answer) {
 		this.newPhoto.val('true');
 		this.inputUrlPhoto.val(answer.url);
+		this.imgLoading.addClass('hidden');
 		renderPhoto.call(this, answer);
 	}
 	

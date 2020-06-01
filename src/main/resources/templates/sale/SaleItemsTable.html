@@ -5,7 +5,7 @@
 	
 	<div class="bw-item-table js-item-table" th:each="item : ${items}" data:total-value="${totalValue}">
 		<div class="bw-item-table__column  bw-item-table__column--photo">
-			<img src="${item.beer.urlThumbnailPhoto}" class="img-responsive"/>
+			<img th:src="${item.beer.urlThumbnailPhoto}" class="img-responsive"/>
 		</div>
 		
 		<div class="bw-item-table__column  bw-item-table__column--details">

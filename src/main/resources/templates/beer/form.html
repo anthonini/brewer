@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt" 
-	xmlns="http://www.w3.org/1999/xhtml" 
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout-default}"
@@ -131,6 +130,7 @@
 						<input type="hidden" th:field="*{newPhoto}"/>
 						<div class="js-beer-photo-container" th:attr="data-url-photo=@{/photos}">
 							<div id="upload-drop" class="bw-upload">
+								<img th:src="@{/images/mini-loading.gif}" class="js-img-loading  hidden"/>
 								<i class="glyphicon  glyphicon-cloud-upload"></i>
 								<span>Arraste a foto aqui ou </span>
 								<a class="bw-upload-form-file">selecione <input id="upload-select" type="file" accept=".jpg,.jpeg,.png"/></a>
