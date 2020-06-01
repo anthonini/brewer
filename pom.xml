@@ -74,6 +74,15 @@
 
 		<!-- Amazom AWS s3  -->
 		<aws-java-sdk-s3.version>1.10.77</aws-java-sdk-s3.version>
+		
+		<!-- Apache Commons DBCP -->
+		<commons-dbcp2.version>2.1.1</commons-dbcp2.version>
+		
+		<!-- JasperReports -->
+		<jasperreports.version>6.3.0</jasperreports.version>
+		
+		<!-- JasperReports Fonts -->
+		<jasperreports-fonts.version>6.0.0</jasperreports-fonts.version>
 	</properties>
 	
 	<build>
@@ -293,6 +302,25 @@
 			<artifactId>aws-java-sdk-s3</artifactId>
             <version>${aws-java-sdk-s3.version}</version>
         </dependency>
+        
+        <!-- Apache Commons DBCP -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>${commons-dbcp2.version}</version>
+		</dependency>
+        
+        <!-- JasperReports -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>${jasperreports.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports-fonts</artifactId>
+		    <version>${jasperreports-fonts.version}</version>
+		</dependency>
 	</dependencies>
 	
 </project>

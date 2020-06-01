@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.BeansException;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -29,6 +31,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.FixedLocaleResolver;
+import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
+import org.springframework.web.servlet.view.jasperreports.JasperReportsViewResolver;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
@@ -65,10 +69,23 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	private ApplicationContext applicationContext;
 	
 	@Bean
+	public ViewResolver jasperReportsViewResolver(DataSource datasource) {
+		JasperReportsViewResolver resolver = new JasperReportsViewResolver();
+		resolver.setPrefix("classpath:/reports/");
+		resolver.setSuffix(".jasper");
+		resolver.setViewNames("report_*");
+		resolver.setViewClass(JasperReportsMultiFormatView.class);
+		resolver.setJdbcDataSource(datasource);
+		resolver.setOrder(0);
+		return resolver;
+	}
+	
+	@Bean
 	public ViewResolver viewResolver() {
 		ThymeleafViewResolver resolver = new ThymeleafViewResolver();
 		resolver.setTemplateEngine(templateEngine());
 		resolver.setCharacterEncoding("UTF-8");
+		resolver.setOrder(1);
 		
 		return resolver;
 	}
