@@ -1,12 +1,11 @@
 package com.anthonini.brewer.controller;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.SQLException;
 
+import org.apache.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.anthonini.brewer.dto.ReportPeriod;
+import com.anthonini.brewer.service.ReportService;
+
+import net.sf.jasperreports.engine.JRException;
 
 @Controller
 @RequestMapping("/report")
 public class ReportController {
+	
+	@Autowired
+	private ReportService reportService;
 
 	@GetMapping("/emittedSales")
 	public ModelAndView emittedSalesReport() {
@@ -28,18 +33,10 @@ public class ReportController {
 	}
 	
 	@PostMapping("/emittedSales")
-	public ModelAndView gerarRelatoriosVendasEmitidas(ReportPeriod reportPeriod) {
-		Map<String, Object> parameters = new HashMap<>();
+	public ResponseEntity<byte[]> generateEmittedSalesReport(ReportPeriod reportPeriod) throws JRException, SQLException {
+		byte[] report = reportService.generateEmittedSalesReport(reportPeriod);
 		
-		Date initalDate = Date.from(LocalDateTime.of(reportPeriod.getInitialDate(), LocalTime.of(0,0,0))
-				.atZone(ZoneId.systemDefault()).toInstant());
-		Date finalDate = Date.from(LocalDateTime.of(reportPeriod.getFinalDate(), LocalTime.of(0,0,0))
-				.atZone(ZoneId.systemDefault()).toInstant());
-		
-		parameters.put("format", "pdf");
-		parameters.put("initial_date", initalDate);
-		parameters.put("final_date", finalDate);
-		
-		return new ModelAndView("report_emitted_sales", parameters);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+				.body(report);
 	}
 }
