@@ -52,7 +52,7 @@ public class StyleController {
 		try {
 			styleService.save(style);
 			
-			redirectAttributes.addFlashAttribute("successMessage", "Style successfully saved!");
+			redirectAttributes.addFlashAttribute("successMessage", "Estilo salvo com sucesso!");
 			return "redirect:new";
 		}catch (StyleNameAlreadyRegisteredException e) {
 			bindingResult.rejectValue("name", e.getMessage(), e.getMessage());
