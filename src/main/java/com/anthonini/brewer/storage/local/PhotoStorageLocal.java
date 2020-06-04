@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,16 +28,11 @@ public class PhotoStorageLocal implements PhotoStorage {
 	private static final Logger logger = LoggerFactory.getLogger(PhotoStorageLocal.class);
 	private static final String THUMBNAIL_PREFIX = "thumbnail.";
 	
+	@Value("${brewer.photo-storage-local.local}")
 	private Path path;
 	
-	public PhotoStorageLocal() {
-		this(getDefault().getPath(System.getenv("HOME"), ".brewerphotos"));
-	}
-	
-	public PhotoStorageLocal(Path path) {
-		this.path = path;
-		criarPastas();
-	}
+	@Value("${brewer.photo-storage-local.url-base}")
+	private String urlBase;
 
 	@Override
 	public String save(MultipartFile[] files) {
@@ -61,6 +59,7 @@ public class PhotoStorageLocal implements PhotoStorage {
 	@Override
 	public byte[] recovery(String name) {
 		try {
+			System.out.println("path = "+this.path);
 			return Files.readAllBytes(this.path.resolve(name));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -90,9 +89,10 @@ public class PhotoStorageLocal implements PhotoStorage {
 	
 	@Override
 	public String getUrl(String photo) {
-		return "http://localhost:8080/brewer/photos/" + photo;
+		return urlBase + photo;
 	}
 	
+	@PostConstruct
 	private void criarPastas() {
 		try {
 			Files.createDirectories(this.path);
