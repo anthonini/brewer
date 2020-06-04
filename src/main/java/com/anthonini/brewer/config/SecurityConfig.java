@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,6 +18,7 @@ import com.anthonini.brewer.security.AppUserDetailsService;
 
 @EnableWebSecurity
 @ComponentScan(basePackageClasses = AppUserDetailsService.class)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -48,9 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.and()
-			.exceptionHandling()
-				.accessDeniedPage("/403")
 				.and()
 			.sessionManagement()
 				.invalidSessionUrl("/login");

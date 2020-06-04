@@ -14,6 +14,7 @@ public class BeerDTO {
 	private String origin;
 	private BigDecimal value;
 	private String photo;
+	private String urlThumbnailPhoto;
 	
 	public BeerDTO(Long id, String sku, String name, Origin origin, BigDecimal value, String photo) {
 		this.id = id;
@@ -70,5 +71,13 @@ public class BeerDTO {
 	
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+
+	public String getUrlThumbnailPhoto() {
+		return urlThumbnailPhoto;
+	}
+
+	public void setUrlThumbnailPhoto(String urlThumbnailPhoto) {
+		this.urlThumbnailPhoto = urlThumbnailPhoto;
 	}
 }

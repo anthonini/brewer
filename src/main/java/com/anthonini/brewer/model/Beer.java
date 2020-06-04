@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
@@ -25,8 +27,10 @@ import javax.validation.constraints.Size;
 
 import org.springframework.util.StringUtils;
 
+import com.anthonini.brewer.repository.listener.BeerEntityListener;
 import com.anthonini.brewer.validation.SKU;
 
+@EntityListeners(BeerEntityListener.class)
 @Entity
 @Table(name = "beer")
 public class Beer implements Serializable {
@@ -87,9 +91,30 @@ public class Beer implements Serializable {
 	@Column(name = "content_type")
 	private String contentType;
 	
+	@Transient
+	private boolean newPhoto;
+	
+	@Transient
+	private String urlPhoto;
+	
+	@Transient
+	private String urlThumbnailPhoto;
+	
 	@PrePersist @PreUpdate
 	private void prePersistUpdate() {
 		sku = sku.toUpperCase();
+	}
+	
+	public String getPhotoOrMock() {
+		return !StringUtils.isEmpty(photo) ? photo : "beer-mock.png";
+	}
+	
+	public boolean hasPhoto() {
+		return !StringUtils.isEmpty(this.getPhoto());
+	}
+	
+	public boolean isNew() {
+		return id == null;
 	}
 
 	public Long getId() {
@@ -195,9 +220,29 @@ public class Beer implements Serializable {
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
 	}
-	
-	public String getPhotoOrMock() {
-		return !StringUtils.isEmpty(photo) ? photo : "beer-mock.png";
+
+	public boolean isNewPhoto() {
+		return newPhoto;
+	}
+
+	public void setNewPhoto(boolean newPhoto) {
+		this.newPhoto = newPhoto;
+	}
+
+	public String getUrlPhoto() {
+		return urlPhoto;
+	}
+
+	public void setUrlPhoto(String urlPhoto) {
+		this.urlPhoto = urlPhoto;
+	}
+
+	public String getUrlThumbnailPhoto() {
+		return urlThumbnailPhoto;
+	}
+
+	public void setUrlThumbnailPhoto(String urlThumbnailPhoto) {
+		this.urlThumbnailPhoto = urlThumbnailPhoto;
 	}
 
 	@Override
@@ -223,6 +268,5 @@ public class Beer implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	
+	}	
 }

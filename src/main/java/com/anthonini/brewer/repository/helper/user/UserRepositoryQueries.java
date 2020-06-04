@@ -16,4 +16,6 @@ public interface UserRepositoryQueries {
 	public List<String> permissions(User user);
 	
 	public Page<User> filter(UserFilter filter, Pageable pageable);
+	
+	public User findWithGroups(Long id);
 }

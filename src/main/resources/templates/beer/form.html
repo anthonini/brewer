@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt" 
-	xmlns="http://www.w3.org/1999/xhtml" 
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout-default}"
@@ -18,7 +17,8 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-10">
-					<h1>Cadastro de cerveja</h1>
+					<h1 th:if="${beer.new}">Cadastro de cerveja</h1>
+					<h1 th:unless="${beer.new}" th:text="|Edição da ${beer.name}|">Edição de cerveja</h1>
 				</div>
 			
 				<div class="col-xs-2">
@@ -33,8 +33,9 @@
 	</div>
 
 		<div class="container-fluid">
-			<form method="POST" th:object="${beer}" class="form-vertical  js-form-loading" th:action="@{/beer/new}">
+			<form method="POST" th:object="${beer}" class="form-vertical  js-form-loading" th:action="${beer.new} ? @{/beer/new} : @{/beer/{id}(id=${beer.id})}">
 				<brewer:message/>
+				<input type="hidden" th:field="*{id}">
 				
 				<div class="row">
 					<div class="col-xs-2  form-group bw-required" brewer:classforerror="sku">
@@ -125,8 +126,11 @@
 						
 						<input type="hidden" th:field="*{photo}"/>
 						<input type="hidden" th:field="*{contentType}"/>
+						<input type="hidden" th:field="*{urlPhoto}"/>
+						<input type="hidden" th:field="*{newPhoto}"/>
 						<div class="js-beer-photo-container" th:attr="data-url-photo=@{/photos}">
 							<div id="upload-drop" class="bw-upload">
+								<img th:src="@{/images/mini-loading.gif}" class="js-img-loading  hidden"/>
 								<i class="glyphicon  glyphicon-cloud-upload"></i>
 								<span>Arraste a foto aqui ou </span>
 								<a class="bw-upload-form-file">selecione <input id="upload-select" type="file" accept=".jpg,.jpeg,.png"/></a>

@@ -11,9 +11,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,9 +28,10 @@ import com.anthonini.brewer.controller.page.PageWrapper;
 import com.anthonini.brewer.model.City;
 import com.anthonini.brewer.repository.CityRepository;
 import com.anthonini.brewer.repository.StateRepository;
-import com.anthonini.brewer.repository.city.CityService;
 import com.anthonini.brewer.repository.filter.CityFilter;
+import com.anthonini.brewer.service.CityService;
 import com.anthonini.brewer.service.exception.CityAlreadyRegisteredException;
+import com.anthonini.brewer.service.exception.NotPossibleDeleteEntityException;
 
 @Controller
 @RequestMapping("/city")
@@ -59,7 +63,7 @@ public class CityController {
 		return cityRepository.findByStateIdOrderByName(stateId);
 	}
 	
-	@PostMapping("/new")
+	@PostMapping({"/new" , "/{\\d+}"})
 	@CacheEvict(value = "cities", key = "#city.state.id", condition = "#city.hasState()")
 	public ModelAndView save(@Valid City city, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
@@ -86,5 +90,24 @@ public class CityController {
 		mv.addObject("page", pageWrapper);
 		
 		return mv;
+	}
+	
+	@GetMapping("/{id}")
+	public ModelAndView update(@PathVariable Long id) {
+		City city = cityRepository.findWithState(id);
+		ModelAndView mv = form(city);
+		mv.addObject(city);
+		
+		return mv;
+	}
+	
+	@DeleteMapping("/{id}")
+	public @ResponseBody ResponseEntity<?> delete(@PathVariable("id") City city) {
+		try {
+			cityService.delete(city);
+		} catch (NotPossibleDeleteEntityException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		return ResponseEntity.ok().build();
 	}
 }

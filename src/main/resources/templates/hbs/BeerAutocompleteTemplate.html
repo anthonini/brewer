@@ -1,7 +1,7 @@
 <script id="beer-autocomplete-template" type="text/x-handlebars-template">
 	<div class="bw-item-table">
 		<div class="bw-item-table__column  bw-item-table__column--photo">
-			<img th:src="@{/photos/thumbnail.{{photo}}}" class="img-responsive" />
+			<img src="{{urlThumbnailPhoto}}" class="img-responsive" />
 		</div>
 		<div class="bw-item-table__column  bw-item-table__column--details">
 			<span class="bw-beer-table-name">{{name}}</span>

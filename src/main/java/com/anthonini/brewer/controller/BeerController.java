@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,6 +30,7 @@ import com.anthonini.brewer.repository.BeerRepository;
 import com.anthonini.brewer.repository.StyleRepository;
 import com.anthonini.brewer.repository.filter.BeerFilter;
 import com.anthonini.brewer.service.BeerService;
+import com.anthonini.brewer.service.exception.NotPossibleDeleteEntityException;
 
 @Controller
 @RequestMapping("/beer")
@@ -51,13 +55,13 @@ public class BeerController {
 		return mv;
 	}
 	
-	@PostMapping("/new")
-	public ModelAndView create(@Valid Beer beer, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	@PostMapping({"/new", "/{\\d+}"})
+	public ModelAndView save(@Valid Beer beer, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			return form(beer);
 		}
 		
-		redirectAttributes.addFlashAttribute("successMessage", "Beer successfully saved!");
+		redirectAttributes.addFlashAttribute("successMessage", "Cerveja salva com sucesso!");
 		beerService.save(beer);
 		
 		return new ModelAndView("redirect:new");
@@ -80,5 +84,23 @@ public class BeerController {
 	@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<BeerDTO> filter(String skuOrName) {
 		return beerRepository.findBySkuOrName(skuOrName);
+	}
+	
+	@DeleteMapping("/{id}")
+	public @ResponseBody ResponseEntity<?> delete(@PathVariable("id") Beer beer) {
+		try {
+			beerService.delete(beer);
+		} catch (NotPossibleDeleteEntityException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/{id}")
+	public ModelAndView update(@PathVariable("id") Beer beer) {
+		ModelAndView mv = form(beer);
+		mv.addObject(beer);
+		
+		return mv;
 	}
 }

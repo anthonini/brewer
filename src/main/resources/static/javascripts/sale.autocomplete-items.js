@@ -13,8 +13,8 @@ Brewer.Autocomplete = (function(){
 	Autocomplete.prototype.start = function(){
 		var options = {
 			url: function(skuOrName) {
-				return '/brewer/beer?skuOrName=' + skuOrName;
-			},
+				return this.skuOrNameInput.data('url') + '?skuOrName=' + skuOrName;
+			}.bind(this),
 			getValue: 'name',
 			minCharNumber: 3,
 			requestDelay: 500,

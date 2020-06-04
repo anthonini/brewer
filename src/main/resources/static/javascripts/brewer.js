@@ -7,8 +7,8 @@ Brewer.MaskMoney = (function(){
 	}
 	
 	MaskMoney.prototype.enable = function() {
-		this.decimal.maskMoney({ decimal: ',', thousands: '.' })
-		this.numero.maskMoney({ precision: 0, thousands: '.' });
+		this.decimal.maskNumber({ decimal: ',', thousands: '.' })
+		this.numero.maskNumber({ integer: true, thousands: '.' });
 	}
 	
 	return MaskMoney;
@@ -71,6 +71,20 @@ Brewer.MaskDate = (function() {
 	
 }());
 
+Brewer.MaskHour = (function() {
+	
+	function MaskHour() {
+		this.inputHour = $('.js-hour');
+	}
+	
+	MaskHour.prototype.enable = function() {
+		this.inputHour.mask('00:00');
+	}
+	
+	return MaskHour;
+	
+}());
+
 Brewer.Security = (function() {
 	
 	function Security() {
@@ -87,9 +101,14 @@ Brewer.Security = (function() {
 	return Security;
 }());
 
-Brewer.formatCurrency = function(value) {
-	numeral.locale('pt-br');
+numeral.language('pt-br');
+
+Brewer.formatCurrency = function(value) {	
 	return numeral(value).format('0,0.00');
+}
+
+Brewer.unFormatCurrency = function(formattedValue) {
+	return numeral().unformat(formattedValue);
 }
 
 $(function(){	
@@ -104,6 +123,9 @@ $(function(){
 	
 	var maskDate = new Brewer.MaskDate();
 	maskDate.enable();
+	
+	var maskHour = new Brewer.MaskHour();
+	maskHour.enable();
 	
 	var security = new Brewer.Security();
 	security.enable();

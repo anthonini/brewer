@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
-
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.model.SaleItem;
 
-@Component
-@SessionScope
-public class SaleItemsTable {
+class SaleItemsTable {
 
+	private String uuid;
 	private List<SaleItem> items = new ArrayList<>();
+	
+	public SaleItemsTable(String uuid) {
+		this.uuid = uuid;
+	}
 
 	public BigDecimal getTotalValue() {
 		return items.stream()
@@ -65,4 +65,35 @@ public class SaleItemsTable {
 	public List<SaleItem> getItems() {
 		return items;
 	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SaleItemsTable other = (SaleItemsTable) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} 
+		
+		return uuid.equals(other.uuid);
+	}
+	
+	
 }

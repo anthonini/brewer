@@ -3,7 +3,8 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout-default}"
-	xmlns:brewer="http://brewer.anthonini.com">
+	xmlns:brewer="http://brewer.anthonini.com"
+	xmlns:data="http://www.thymeleaf.com/extras/data">
 	
 <head>
 	<title>Pesquisa de cervejas</title>
@@ -112,18 +113,21 @@
 				<tbody>
 					<tr th:each="beer : ${page.content}">
 						<td class="text-center">
-							<img th:src="@{/photos/thumbnail.{photo}(photo=${beer.photoOrMock})}" class="img-responsive"/>
+							<!-- <img th:src="@{/photos/thumbnail.{photo}(photo=${beer.photoOrMock})}" class="img-responsive"/> -->
+							<img th:src="${beer.urlThumbnailPhoto}" class="img-responsive"/>
 						</td>
 						<td class="text-center" th:text="${beer.sku}">AA1234</td>
 						<td th:text="${beer.name}">Cerveja Stella</td>
 						<td th:text="${beer.style.name}">Lager</td>
 						<td th:text="${beer.origin.description}">Internacional</td>
-						<td class="text-right" th:text="|R$ ${beer.value}|">R$ 8.00</td>
+						<td class="text-right" th:text="|R$ ${{beer.value}}|">R$ 8.00</td>
 						<td class="text-center">
-							<a class="btn  btn-link  btn-xs" title="Editar"> 
+							<a class="btn  btn-link  btn-xs js-tooltip" title="Editar" th:href="@{/beer/{id}(id=${beer.id})}"> 
 								<i class="glyphicon glyphicon-pencil"></i>
 							</a>
-							<a class="btn  btn-link  btn-xs" title="Excluir">
+							<a class="btn  btn-link  btn-xs js-tooltip js-exclusion-btn" title="Excluir" href="#" 
+								data:url="@{/beer/{id}(id=${beer.id})}"
+					 			data:object="${beer.name}">
 								<i class="glyphicon glyphicon-remove"></i>
 							</a>
 						</td>

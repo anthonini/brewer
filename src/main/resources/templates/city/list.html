@@ -4,6 +4,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout-default}"
 	xmlns:brewer="http://brewer.anthonini.com"
+	xmlns:data="http://www.thymeleaf.com/extras/data"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	
 <head>
@@ -69,10 +70,12 @@
 							<td th:text="${city.name}">Nome</td>
 							<td class="text-right" th:text="${city.state.name}">Estado</td>
 							<td class="text-center" sec:authorize="hasRole('ROLE_REGISTER_CITY')">
-								<a class="btn  btn-link  btn-xs" title="Editar"> 
+								<a class="btn  btn-link  btn-xs js-tooltip" title="Editar" th:href="@{/city/{id}(id=${city.id})}"> 
 									<i class="glyphicon glyphicon-pencil"></i>
 								</a>
-								<a class="btn  btn-link  btn-xs" title="Excluir">
+								<a class="btn  btn-link  btn-xs js-tooltip js-exclusion-btn" title="Excluir" href="#"
+									data:url="@{/city/{id}(id=${city.id})}"
+					 				data:object="${city.name}">
 									<i class="glyphicon glyphicon-remove"></i>
 								</a>
 							</td>

@@ -10,7 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,7 @@ import com.anthonini.brewer.model.Style;
 import com.anthonini.brewer.repository.StyleRepository;
 import com.anthonini.brewer.repository.filter.StyleFilter;
 import com.anthonini.brewer.service.StyleService;
+import com.anthonini.brewer.service.exception.NotPossibleDeleteEntityException;
 import com.anthonini.brewer.service.exception.StyleNameAlreadyRegisteredException;
 
 @Controller
@@ -30,17 +33,17 @@ import com.anthonini.brewer.service.exception.StyleNameAlreadyRegisteredExceptio
 public class StyleController {
 	
 	@Autowired
-	StyleService styleService;
+	private StyleService styleService;
 	
 	@Autowired
-	StyleRepository styleRepository;
+	private StyleRepository styleRepository;
 
 	@GetMapping("/new")
 	public String form(Style style) {
 		return "style/form";
 	}
 	
-	@PostMapping("/new")
+	@PostMapping({"/new", "/{\\d+}"})
 	public String save(@Valid Style style, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			return form(style);
@@ -70,12 +73,31 @@ public class StyleController {
 	
 	@GetMapping
 	public ModelAndView list(StyleFilter styleFilter, BindingResult bindingResult,
-			@PageableDefault(size = 2) Pageable pageable, HttpServletRequest httpServletRequest) {
+			@PageableDefault(size = 5) Pageable pageable, HttpServletRequest httpServletRequest) {
 		ModelAndView mv = new ModelAndView("style/list");
-		
+			
 		PageWrapper<Style> pageWrapper = new PageWrapper<>(styleRepository.filter(styleFilter, pageable), httpServletRequest);
 		mv.addObject("page", pageWrapper);
 		
 		return mv;
+	}
+	
+	@GetMapping("/{id}")
+	public ModelAndView update(@PathVariable Long id) {
+		Style style = styleRepository.getOne(id);
+		ModelAndView mv = new ModelAndView("style/form");
+		mv.addObject(style);
+		
+		return mv;
+	}
+	
+	@DeleteMapping("/{id}")
+	public @ResponseBody ResponseEntity<?> delete(@PathVariable("id") Style style) {
+		try {
+			styleService.delete(style);
+		} catch (NotPossibleDeleteEntityException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		return ResponseEntity.ok().build();
 	}
 }

@@ -104,10 +104,12 @@
 							<span class="label" th:text="${user.status}" th:classappend="${user.active ? 'label-success' : 'label-danger'}"></span>
 						</td>
 						<td class="text-center">
-							<a class="btn  btn-link  btn-xs" title="Editar"> 
+							<a class="btn  btn-link  btn-xs js-tooltip" title="Editar" th:href="@{/user/{id}(id=${user.id})}"> 
 								<i class="glyphicon glyphicon-pencil"></i>
 							</a>
-							<a class="btn  btn-link  btn-xs" title="Excluir">
+							<a class="btn  btn-link  btn-xs js-tooltip js-exclusion-btn" title="Excluir" th:if="${user.id != #authentication.principal.user.id}"
+								data:url="@{/user/{id}(id=${user.id})}"
+								data:object="${user.name}">
 								<i class="glyphicon glyphicon-remove"></i>
 							</a>
 						</td>

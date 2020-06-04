@@ -43,14 +43,12 @@ public class User implements Serializable {
 	@Email(message = "E-mail inválido")
 	private String email;
 	
-	@NotBlank(message = "Senha é obrigatório")
 	private String password;
-	
-	@NotBlank(message = "Confirmação de senha é obrigatório")
+
 	@Transient
 	private String passwordConfirmation;
 	
-	private boolean active;
+	private Boolean active;
 	
 	@Column(name = "birth_date")
 	private LocalDate birthDate;
@@ -74,6 +72,13 @@ public class User implements Serializable {
 		this.passwordConfirmation = password;
 	}
 	
+	public User() {
+	}
+	
+	public User(Long id) {
+		this.id = id;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -106,14 +111,14 @@ public class User implements Serializable {
 		this.password = password;
 	}
 	
-	public boolean isActive() {
+	public Boolean getActive() {
 		return active;
 	}
-	
-	public void setActive(boolean active) {
+
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
+
 	public LocalDate getBirthDate() {
 		return birthDate;
 	}

@@ -36,6 +36,10 @@ public class City implements Serializable {
 	@JsonIgnore
 	private State state;
 	
+	public boolean isNew() {
+		return id == null;
+	}
+	
 	public boolean hasState() {
 		return state != null;
 	}

@@ -46,6 +46,10 @@ public class Style implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public boolean isNew() {
+		return id == null;
+	}
 
 	@Override
 	public int hashCode() {

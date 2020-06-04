@@ -13,8 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,6 +31,7 @@ import com.anthonini.brewer.repository.StateRepository;
 import com.anthonini.brewer.repository.filter.ClientFilter;
 import com.anthonini.brewer.service.ClientService;
 import com.anthonini.brewer.service.exception.AlreadyRegisteredClientCpfCnpjException;
+import com.anthonini.brewer.service.exception.NotPossibleDeleteEntityException;
 
 @Controller
 @RequestMapping("/client")
@@ -52,7 +55,7 @@ public class ClientController {
 		return mv;
 	}
 	
-	@PostMapping("/new")
+	@PostMapping({"/new", "/{\\d+}"})
 	public ModelAndView save(@Valid Client client, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			return form(client);
@@ -61,7 +64,7 @@ public class ClientController {
 		try {
 			clientService.save(client);
 			
-			redirectAttributes.addFlashAttribute("successMessage", "Client successfully saved!");		
+			redirectAttributes.addFlashAttribute("successMessage", "Cliente salvo com sucesso!");		
 			return new ModelAndView("redirect:new");
 
 		}catch (AlreadyRegisteredClientCpfCnpjException e) {
@@ -86,7 +89,24 @@ public class ClientController {
 		validateNameLength(name);
 		return clientRepository.findByNameStartingWithIgnoreCase(name);
 	}
-
+	
+	@GetMapping("/{id}")
+	public ModelAndView update(@PathVariable("id") Client client) {
+		ModelAndView mv = form(client);
+		mv.addObject(client);
+		
+		return mv;
+	}
+	
+	@DeleteMapping("/{id}")
+	public @ResponseBody ResponseEntity<?> delete(@PathVariable("id") Client client) {
+		try {
+			clientService.delete(client);
+		} catch (NotPossibleDeleteEntityException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		return ResponseEntity.ok().build();
+	}
 	
 	private void validateNameLength(String name) {
 		if(StringUtils.isEmpty(name) || name.length() < 3) {

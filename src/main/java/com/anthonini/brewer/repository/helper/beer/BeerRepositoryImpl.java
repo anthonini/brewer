@@ -18,9 +18,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import com.anthonini.brewer.dto.BeerDTO;
+import com.anthonini.brewer.dto.StockItemsValue;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.repository.filter.BeerFilter;
 import com.anthonini.brewer.repository.pagination.PaginationUtil;
+import com.anthonini.brewer.storage.PhotoStorage;
 
 public class BeerRepositoryImpl implements BeerRepositoryQueries {
 
@@ -29,6 +31,9 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 	
 	@Autowired
 	private PaginationUtil<Beer> paginationUtil;
+	
+	@Autowired
+	private PhotoStorage photoStorage;
 	
 	@Override
 	public Page<Beer> filter(BeerFilter filter, Pageable pageable) {
@@ -42,6 +47,27 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 		TypedQuery<Beer> query = paginationUtil.prepare(builder, criteriaQuery, beer, pageable);
 		
 		return new PageImpl<>(query.getResultList(), pageable, total(filter));
+	}
+	
+	@Override
+	public List<BeerDTO> findBySkuOrName(String skuOrName) {
+		String jpql = "select new com.anthonini.brewer.dto.BeerDTO(id, sku, name, origin, value, photo) " +
+					  "from Beer "+
+					  "where lower(sku) like lower(:skuOrName) or lower(name) like lower(:skuOrName)";
+		
+		List<BeerDTO> filteredBeers = manager.createQuery(jpql, BeerDTO.class)
+					  .setParameter("skuOrName", skuOrName + "%")
+					  .getResultList();
+		
+		filteredBeers.forEach(b -> b.setUrlThumbnailPhoto(photoStorage.getUrl(PhotoStorage.THUMBNAIL_PREFIX + b.getPhoto())));
+		
+		return filteredBeers;
+	}
+	
+	@Override
+	public StockItemsValue stockItemsValue() {
+		String query = "select new com.anthonini.brewer.dto.StockItemsValue(sum(value * stockQuantity), sum(stockQuantity)) from Beer";
+		return manager.createQuery(query, StockItemsValue.class).getSingleResult();
 	}
 	
 	private Long total(BeerFilter filter) {
@@ -92,16 +118,5 @@ public class BeerRepositoryImpl implements BeerRepositoryQueries {
 
 	private boolean hasStyle(BeerFilter filter) {
 		return filter.getStyle() != null && filter.getStyle().getId()!= null;
-	}
-	
-	@Override
-	public List<BeerDTO> findBySkuOrName(String skuOrName) {
-		String jpql = "select new com.anthonini.brewer.dto.BeerDTO(id, sku, name, origin, value, photo) " +
-					  "from Beer "+
-					  "where lower(sku) like lower(:skuOrName) or lower(name) like lower(:skuOrName)";
-		
-		return manager.createQuery(jpql, BeerDTO.class)
-					  .setParameter("skuOrName", skuOrName + "%")
-					  .getResultList();		
 	}
 }

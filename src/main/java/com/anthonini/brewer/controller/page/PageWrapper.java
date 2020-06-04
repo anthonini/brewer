@@ -11,6 +11,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 public class PageWrapper<T> {
 
+	private static final int PAGE_QUANTITY = 10;
+	
 	private Page<T> page;
 	private UriComponentsBuilder uriBuilder;
 	
@@ -18,7 +20,7 @@ public class PageWrapper<T> {
 		this.page = page;
 		String httpUrl = httpServletRequest.getRequestURL().append(
 				httpServletRequest.getQueryString() != null ? "?" + httpServletRequest.getQueryString() : "")
-				.toString().replaceAll("\\+", "%20");
+				.toString().replaceAll("\\+", "%20").replaceAll("excluded", "");
 		this.uriBuilder = UriComponentsBuilder.fromHttpUrl(httpUrl);
 	}
 	
@@ -40,6 +42,18 @@ public class PageWrapper<T> {
 	
 	public int getActual() {
 		return page.getNumber();
+	}
+	
+	public int getFirstPage() {
+		return Math.max(1, getActual()+2 - PAGE_QUANTITY);
+	}
+	
+	public int getLastPage() {
+		return Math.min(getTotal(), getFirstPage()+PAGE_QUANTITY-1);
+	}
+	
+	public int getPageQuantity() {
+		return PAGE_QUANTITY;
 	}
 	
 	public int getTotal() {

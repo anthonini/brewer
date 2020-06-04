@@ -175,6 +175,11 @@
 	padding: 0px 5px !important;
 }
 
+/* Box */
+.negative-value {
+	color: red;
+}
+
 /* Tabela Item */
 .bw-item-table {
 	position: relative; /* Para que o painel de exclusão apareça dentro da linha */
