@@ -17,7 +17,7 @@ public class SaleListener {
 	@EventListener
 	public void emmitedSale(SaleEvent saleEvent) {
 		for (SaleItem item : saleEvent.getSale().getItems()) {
-			Beer beer = beerRepository.findOne(item.getBeer().getId());
+			Beer beer = beerRepository.getOne(item.getBeer().getId());
 			beer.setStockQuantity(beer.getStockQuantity() - item.getQuantity());
 			beerRepository.save(beer);
 		}

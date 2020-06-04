@@ -1,10 +1,12 @@
 package com.anthonini.brewer.controller.converter;
 
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.anthonini.brewer.model.City;
 
+@Component
 public class CityConverter implements Converter<String, City> {
 
 	@Override

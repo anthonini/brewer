@@ -84,7 +84,7 @@ public class StyleController {
 	
 	@GetMapping("/{id}")
 	public ModelAndView update(@PathVariable Long id) {
-		Style style = styleRepository.findOne(id);
+		Style style = styleRepository.getOne(id);
 		ModelAndView mv = new ModelAndView("style/form");
 		mv.addObject(style);
 		

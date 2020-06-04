@@ -4,18 +4,13 @@ import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import com.anthonini.brewer.mail.Mailer;
-
 @Configuration
-@ComponentScan(basePackageClasses = Mailer.class)
-@PropertySource({ "classpath:env/mail-${enviroment:local}.properties" })
 @PropertySource(value = { "file:///${HOME}/.brewer-mail.properties" }, ignoreResourceNotFound = true)
 public class MailConfig {
 
@@ -27,8 +22,8 @@ public class MailConfig {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost("smtp.sendgrid.net");
 		mailSender.setPort(587);
-		mailSender.setUsername(env.getProperty("email.username"));
-		mailSender.setPassword(env.getProperty("email.password"));
+		mailSender.setUsername(env.getProperty("brewer.mail.username"));
+		mailSender.setPassword(env.getProperty("brewer.mail.password"));
 		
 		Properties props = new Properties();
 		props.put("mail.transport.protocol", "smtp");

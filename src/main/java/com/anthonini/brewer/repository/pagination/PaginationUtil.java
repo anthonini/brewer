@@ -20,7 +20,7 @@ public class PaginationUtil<T> {
 
 	public TypedQuery<T> prepare(CriteriaBuilder builder, CriteriaQuery<T> criteriaQuery, Root<T> root, Pageable pageable) {
 		Sort sort = pageable.getSort();
-		if (sort != null) {
+		if (sort != null && sort.isSorted()) {
 			Sort.Order order = sort.iterator().next();
 			criteriaQuery.orderBy(order.isAscending() ? builder.asc(getPath(order, root)) : builder.desc(getPath(order, root)));
 		}

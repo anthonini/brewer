@@ -33,7 +33,7 @@ public class SaleService {
 		if(sale.isNew()) {
 			sale.setCreationDate(LocalDateTime.now());
 		} else {
-			Sale saleDB = saleRepository.findOne(sale.getId());
+			Sale saleDB = saleRepository.getOne(sale.getId());
 			sale.setCreationDate(saleDB.getCreationDate());
 		}
 		
@@ -55,7 +55,7 @@ public class SaleService {
 	@PreAuthorize("#sale.user == principal.user or hasRole('SALE_CANCEL')")
 	@Transactional
 	public void cancel(Sale sale) {
-		sale = saleRepository.findOne(sale.getId());
+		sale = saleRepository.getOne(sale.getId());
 		
 		sale.setStatus(SaleStatus.CANCELADA);
 		save(sale);
