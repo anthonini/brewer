@@ -59,7 +59,6 @@ public class PhotoStorageLocal implements PhotoStorage {
 	@Override
 	public byte[] recovery(String name) {
 		try {
-			System.out.println("path = "+this.path);
 			return Files.readAllBytes(this.path.resolve(name));
 		} catch (IOException e) {
 			e.printStackTrace();
