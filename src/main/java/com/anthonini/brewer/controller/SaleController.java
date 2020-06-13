@@ -128,7 +128,7 @@ public class SaleController {
 	
 	@PostMapping("/item")
 	public ModelAndView addItem(Long beerId, String uuid) {
-		Beer beer = beerRepository.getOne(beerId);
+		Beer beer = beerRepository.findById(beerId).orElse(null);
 		saleItemsTableSession.addItem(uuid, beer, 1);
 		
 		return mvSaleItemsTable(uuid);
