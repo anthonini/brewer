@@ -72,7 +72,7 @@ public class CityController {
 		
 		try {
 			cityService.save(city);
-			redirectAttributes.addFlashAttribute("successMessage", "Cidade cadastrada com sucesso!");
+			redirectAttributes.addFlashAttribute("successMessage", "Cidade salva com sucesso!");
 			return new ModelAndView("redirect:new");
 		}catch (CityAlreadyRegisteredException e) {
 			bindingResult.rejectValue("name", e.getMessage(), e.getMessage());
