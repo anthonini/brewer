@@ -28,12 +28,12 @@ import com.anthonini.brewer.model.User;
 import com.anthonini.brewer.repository.UserGroupRepository;
 import com.anthonini.brewer.repository.UserRepository;
 import com.anthonini.brewer.repository.filter.UserFilter;
-import com.anthonini.brewer.service.NotPossibleDeleteUserException;
-import com.anthonini.brewer.service.UserPasswordRequiredException;
 import com.anthonini.brewer.service.UserService;
 import com.anthonini.brewer.service.UserStatus;
+import com.anthonini.brewer.service.exception.NotPossibleDeleteUserException;
 import com.anthonini.brewer.service.exception.UserCannotRemoveYourselfException;
 import com.anthonini.brewer.service.exception.UserEmailAlreadyRegisteredException;
+import com.anthonini.brewer.service.exception.UserPasswordRequiredException;
 
 @Controller
 @RequestMapping("/user")
