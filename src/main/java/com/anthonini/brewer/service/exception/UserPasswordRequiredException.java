@@ -1,4 +1,4 @@
-package com.anthonini.brewer.service;
+package com.anthonini.brewer.service.exception;
 
 public class UserPasswordRequiredException extends RuntimeException {
 

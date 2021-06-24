@@ -14,8 +14,10 @@ import org.springframework.util.StringUtils;
 import com.anthonini.brewer.model.User;
 import com.anthonini.brewer.repository.UserRepository;
 import com.anthonini.brewer.security.SystemUser;
+import com.anthonini.brewer.service.exception.NotPossibleDeleteUserException;
 import com.anthonini.brewer.service.exception.UserCannotRemoveYourselfException;
 import com.anthonini.brewer.service.exception.UserEmailAlreadyRegisteredException;
+import com.anthonini.brewer.service.exception.UserPasswordRequiredException;
 
 @Service
 public class UserService {
