@@ -10,20 +10,29 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
-@PropertySource(value = { "file:///${HOME}/.brewer-mail.properties" }, ignoreResourceNotFound = true)
+@PropertySource(value = { "file:///${user.home}/.brewer-mail.properties" }, ignoreResourceNotFound = true)
 public class MailConfig {
 	
-	@Value("${external.brewer.mail.username:brewer.mail.username}")
+	@Value("${external.brewer.mail.host:${brewer.mail.host}}")
+	private String host;
+	
+	@Value("${external.brewer.mail.port:${brewer.mail.port}}")
+	private int port;
+	
+	@Value("${external.brewer.mail.username:${brewer.mail.username}}")
 	private String username;
 	
-	@Value("${external.brewer.mail.password:brewer.mail.password}")
+	@Value("${external.brewer.mail.password:${brewer.mail.password}}")
 	private String password;
+	
+	@Value("${external.brewer.mail.from:${brewer.mail.from}}")
+	private String from;
 
 	@Bean
 	public JavaMailSender mailSender() {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("smtp.sendgrid.net");
-		mailSender.setPort(587);
+		mailSender.setHost(host);
+		mailSender.setPort(port);
 		mailSender.setUsername(username);
 		mailSender.setPassword(password);
 		
@@ -37,5 +46,9 @@ public class MailConfig {
 		mailSender.setJavaMailProperties(props);
 		
 		return mailSender;
+	}
+	
+	public String getFrom() {
+		return from;
 	}
 }
