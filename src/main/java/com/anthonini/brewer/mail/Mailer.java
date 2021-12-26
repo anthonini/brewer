@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.anthonini.brewer.config.MailConfig;
 import com.anthonini.brewer.model.Beer;
 import com.anthonini.brewer.model.Sale;
 import com.anthonini.brewer.model.SaleItem;
@@ -37,6 +38,9 @@ public class Mailer {
 	
 	@Autowired
 	private PhotoStorage photoStorage;
+	
+	@Autowired
+	private MailConfig mailConfig;
 	
 	@Async
 	public void send(Sale sale) {
@@ -64,7 +68,7 @@ public class Mailer {
 			
 			MimeMessage mimeMessage = mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-			helper.setFrom("anthonnini@gmail.com");
+			helper.setFrom(mailConfig.getFrom());
 			helper.setTo(sale.getClient().getEmail());
 			helper.setSubject(String.format("Brewer - Venda nº %d", sale.getId()));
 			helper.setText(email, true);
